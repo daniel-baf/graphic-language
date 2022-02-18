@@ -1,0 +1,131 @@
+/***************************************/
+/********** USER CODE SECTION **********/
+/***************************************/
+
+package Parser;
+
+import java_cup.runtime.*;
+import Lexer.GraphLangLexer;
+
+parser code {:
+
+    /* CONSTRUCTOR */
+    public GraphLangParser(GraphLangLexer lexer) {
+        super(lexer);
+    }
+
+    /* ERRORS METHOD */
+    public void report_error(String message, Object info) {
+        System.out.println("public void report_error");
+    }
+    
+    public void report_fatal_error(String message, Object info) {
+        System.out.println("public void report_fatal_error");
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+        System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        if (cur_token.sym == sym.EOF) {
+            System.out.println("public void unrecoveredsyntax_error");
+        }
+    }
+:}
+
+/**************************************/
+/********** TERMINAL SECTION **********/
+/**************************************/
+
+// special symbols
+terminal COMMA, COLON, SEMI_COLON;
+terminal OPEN_BRACES, CLOSE_BRACES, OPEN_BRACKETS, CLOSE_BRACKETS, NEW_LINE;
+
+// arythmetical symbols
+terminal ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION;
+terminal OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
+
+// reserved words
+// graph styles and attributes
+terminal DEF, GRAPH_BAR, GRAPH_PIE, TITLE_ATTR, MERGE_ATTR;
+terminal X_AXIS_ATTR, Y_AXIS_ATTR, TYPE_ATTR, LABEL_ATTR, VALUES_ATTR, TOTAL_ATTR;
+terminal EXTRA_ATTR, TYPE_CUANT_ATTR, TYPE_PERC_ATTR, ERROR;
+
+// extras
+terminal VAL_ON_COMILLAS, NUM_INT, NUM_DEC, ID;
+
+/******************************************/
+/********** NON TERMINAL SECTION **********/
+/******************************************/
+
+/* NON TERMINAL SECTION */
+non terminal main, bar_dec, pie_dec, title_dec, x_ax_dec, y_ax_dec, merge_dec;
+non terminal type_dec, tags_dec, vals_dec, total_dec, extra_dec, mult_comillas;
+non terminal mult_nums, mult_braces, brace_conj, digit, arithm;
+
+
+
+/**************************************/
+/********** TYPE 2 GRAMATICS **********/
+/**************************************/
+
+start with main;
+
+main ::= DEF GRAPH_BAR OPEN_BRACES bar_dec CLOSE_BRACES
+| DEF GRAPH_PIE OPEN_BRACES pie_dec CLOSE_BRACES
+;
+
+bar_dec ::= title_dec x_ax_dec y_ax_dec merge_dec SEMI_COLON
+;	
+		
+pie_dec	::= title_dec type_dec tags_dec vals_dec total_dec merge_dec extra_dec SEMI_COLON
+| title_dec type_dec tags_dec vals_dec merge_dec extra_dec SEMI_COLON
+;	
+		
+title_dec ::= TITLE_ATTR COLON VAL_ON_COMILLAS SEMI_COLON
+;	
+		
+x_ax_dec ::= X_AXIS_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON
+;	
+		
+y_ax_dec ::= Y_AXIS_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON
+;	
+		
+merge_dec ::= MERGE_ATTR COLON OPEN_BRACKETS mult_braces CLOSE_BRACKETS SEMI_COLON
+;	
+		
+type_dec ::= TYPE_ATTR COLON TYPE_CUANT_ATTR SEMI_COLON
+| TYPE_ATTR COLON TYPE_PERC_ATTR SEMI_COLON
+;	
+		
+tags_dec ::= LABEL_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON
+;	
+		
+vals_dec ::= VALUES_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON
+;	
+		
+total_dec ::= TOTAL_ATTR COLON NUM_INT SEMI_COLON
+| TOTAL_ATTR COLON NUM_DEC SEMI_COLON
+;	
+		
+extra_dec ::= EXTRA_ATTR COLON VAL_ON_COMILLAS SEMI_COLON
+;	
+		
+mult_comillas ::= VAL_ON_COMILLAS COMMA mult_comillas
+| VAL_ON_COMILLAS
+;	
+		
+mult_nums ::= digit COMMA mult_nums
+;	
+		
+mult_braces ::= brace_conj COMMA mult_braces
+;	
+		
+brace_conj ::= OPEN_BRACES digit COMMA digit CLOSE_BRACES
+;
+		
+digit ::= NUM_INT
+| NUM_DEC
+;
