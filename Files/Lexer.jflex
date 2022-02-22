@@ -17,8 +17,8 @@ import Parser.sym;
 /** DEFINE LANGUAGE **/
 Letter=[a-zA-Z]+ // letters
 Ints=[0-9]+ // digits integer
-Decimal=[0-9]+'.'[0-9]+ // digits decimal
-whitespace=[ ,\t,\r,\f,\v]+ // whitespace
+Decimal=[0-9]+"."[0-9]+ // digits decimal
+whitespace=[\s\t\r\n]+ // whitespace
 
 %%
 
@@ -51,7 +51,7 @@ whitespace=[ ,\t,\r,\f,\v]+ // whitespace
 {whitespace}        {/*Ignore*/}
 /* COMMENT */
 ("#"(.)*)           {/*Ignore*/}
-{"\n"}              {return new Symbol(sym.NEW_LINE, yyline + 1, yycolumn + 1,  yytext());}
+
 
 /************************************************************/
 /******************* arythmetical symbols *******************/
@@ -95,15 +95,16 @@ whitespace=[ ,\t,\r,\f,\v]+ // whitespace
 /* TYPE FOR RESULTS */
 (Cantidad)          {return new Symbol( sym.TYPE_CUANT_ATTR, yyline + 1, yycolumn + 1);}
 (Porcentaje)        {return new Symbol( sym.TYPE_PERC_ATTR, yyline + 1, yycolumn + 1);}
+(Ejecutar)          {return new Symbol( sym.EXECUTE_ACT, yyline + 1, yycolumn + 1);}
 
 /* DEFINE EXTRAS */
 /* name set attribute */
-("\""(.)*"\"")      {return new Symbol( sym.VAL_ON_COMILLAS, yyline + 1, yycolumn + 1, yytext());}
+(\"([a-zA-Z]|(\s)|[0-9])+\")         {return new Symbol( sym.VAL_ON_COMILLAS, yyline + 1, yycolumn + 1, yytext());}
 /* Numbers */
 {Ints}              {return new Symbol(sym.NUM_INT, yyline + 1, yycolumn + 1, new Integer(yytext()));}
 {Decimal}           {return new Symbol(sym.NUM_DEC, yyline + 1, yycolumn + 1, Double.valueOf(yytext()));}
 /*TEXT*/
-({Letter}({Letter}|{Ints}*))            {return new Symbol(sym.ID, yyline + 1, yycolumn + 1, yytext());}
+({Letter}({Letter}|{Ints})*)           {return new Symbol(sym.ID, yyline + 1, yycolumn + 1, yytext());}
 
 /*********************************************/
 /******************* other *******************/

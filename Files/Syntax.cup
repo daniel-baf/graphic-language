@@ -6,8 +6,17 @@ package Parser;
 
 import java_cup.runtime.*;
 import Lexer.GraphLangLexer;
+import Backend.ParserActions.ParserActioner;
+import java.util.ArrayList;
 
 parser code {:
+
+    // for actions
+    ParserActioner actioner = new ParserActioner();
+    // for data save
+    ArrayList<String> stringArray = new ArrayList<>();
+    private String messageAnalyz = "";
+    int action = 0;
 
     /* CONSTRUCTOR */
     public GraphLangParser(GraphLangLexer lexer) {
@@ -24,15 +33,34 @@ parser code {:
     }
 
     public void syntax_error(Symbol cur_token) {
-        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
-        System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+        if(cur_token.sym == sym.EOF) {
+            // TODO what to do when file ends
+            System.out.println("File read eneded");
+        } else {
+//            System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+//            System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+        }
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
         if (cur_token.sym == sym.EOF) {
-            System.out.println("public void unrecoveredsyntax_error");
+            // TODO add what to do in case of EOF
         }
     }
+
+    private void addMessage(String message) {
+        this.messageAnalyz += "\nAction  " + action + "\t" + message;
+        this.action++;
+    }
+
+    public String getMessageAnalyz() {
+        return this.messageAnalyz;
+    }
+
+    public void registError(Symbol cur_token, String message) {
+        actioner.addError(cur_token.left, cur_token.right, sym.terminalNames[cur_token.sym].toString(), message, 1);
+    }
+
 :}
 
 /**************************************/
@@ -41,7 +69,7 @@ parser code {:
 
 // special symbols
 terminal COMMA, COLON, SEMI_COLON;
-terminal OPEN_BRACES, CLOSE_BRACES, OPEN_BRACKETS, CLOSE_BRACKETS, NEW_LINE;
+terminal OPEN_BRACES, CLOSE_BRACES, OPEN_BRACKETS, CLOSE_BRACKETS;
 
 // arythmetical symbols
 terminal ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION;
@@ -51,7 +79,7 @@ terminal OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
 // graph styles and attributes
 terminal DEF, GRAPH_BAR, GRAPH_PIE, TITLE_ATTR, MERGE_ATTR;
 terminal X_AXIS_ATTR, Y_AXIS_ATTR, TYPE_ATTR, LABEL_ATTR, VALUES_ATTR, TOTAL_ATTR;
-terminal EXTRA_ATTR, TYPE_CUANT_ATTR, TYPE_PERC_ATTR, ERROR;
+terminal EXTRA_ATTR, TYPE_CUANT_ATTR, TYPE_PERC_ATTR, ERROR, EXECUTE_ACT;
 
 // extras
 terminal VAL_ON_COMILLAS, NUM_INT, NUM_DEC, ID;
@@ -63,69 +91,190 @@ terminal VAL_ON_COMILLAS, NUM_INT, NUM_DEC, ID;
 /* NON TERMINAL SECTION */
 non terminal main, bar_dec, pie_dec, title_dec, x_ax_dec, y_ax_dec, merge_dec;
 non terminal type_dec, tags_dec, vals_dec, total_dec, extra_dec, mult_comillas;
-non terminal mult_nums, mult_braces, brace_conj, digit, arithm;
+non terminal mult_nums, mult_braces, brace_conj, digit, arithm, arithm_sim;
+non terminal bar_dec_sub, pie_dec_sub, def_graph_section, def_graph, exec_graph_section, exec_graph;
 
+/* precedence */
+precedence left ADDITION, SUBSTRACTION;
+precedence left MULTIPLICATION, DIVISION;
+precedence left arithm, arithm_sim;
 
 
 /**************************************/
 /********** TYPE 2 GRAMATICS **********/
 /**************************************/
 
-start with main;
+start with main; // switch man for def_graph_section exec_graph_section
 
-main ::= DEF GRAPH_BAR OPEN_BRACES bar_dec CLOSE_BRACES
-| DEF GRAPH_PIE OPEN_BRACES pie_dec CLOSE_BRACES
+main ::= 
+        def_graph_section exec_graph_section
+      | def_graph_section 
 ;
 
-bar_dec ::= title_dec x_ax_dec y_ax_dec merge_dec SEMI_COLON
-;	
-		
-pie_dec	::= title_dec type_dec tags_dec vals_dec total_dec merge_dec extra_dec SEMI_COLON
-| title_dec type_dec tags_dec vals_dec merge_dec extra_dec SEMI_COLON
-;	
-		
-title_dec ::= TITLE_ATTR COLON VAL_ON_COMILLAS SEMI_COLON
-;	
-		
-x_ax_dec ::= X_AXIS_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON
-;	
-		
-y_ax_dec ::= Y_AXIS_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON
-;	
-		
-merge_dec ::= MERGE_ATTR COLON OPEN_BRACKETS mult_braces CLOSE_BRACKETS SEMI_COLON
-;	
-		
-type_dec ::= TYPE_ATTR COLON TYPE_CUANT_ATTR SEMI_COLON
-| TYPE_ATTR COLON TYPE_PERC_ATTR SEMI_COLON
-;	
-		
-tags_dec ::= LABEL_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON
-;	
-		
-vals_dec ::= VALUES_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON
-;	
-		
-total_dec ::= TOTAL_ATTR COLON NUM_INT SEMI_COLON
-| TOTAL_ATTR COLON NUM_DEC SEMI_COLON
-;	
-		
-extra_dec ::= EXTRA_ATTR COLON VAL_ON_COMILLAS SEMI_COLON
-;	
-		
-mult_comillas ::= VAL_ON_COMILLAS COMMA mult_comillas
-| VAL_ON_COMILLAS
-;	
-		
-mult_nums ::= digit COMMA mult_nums
-;	
-		
-mult_braces ::= brace_conj COMMA mult_braces
-;	
-		
-brace_conj ::= OPEN_BRACES digit COMMA digit CLOSE_BRACES
+def_graph_section ::=
+      def_graph_section def_graph                                               {: addMessage("multiple graph declaration"); :}
+    | def_graph                                                                 {: addMessage("final graph declaration"); :}
+;
+
+exec_graph_section ::=
+      exec_graph_section exec_graph
+    | exec_graph    
+;
+
+exec_graph ::=
+    EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS CLOSE_PARENTHESIS SEMI_COLON   {: addMessage("EJECUTAR grafica"); :}
+;
+
+def_graph ::=
+      DEF GRAPH_BAR OPEN_BRACES bar_dec CLOSE_BRACES                            {: actioner.saveBarGraphData(); :}
+    | DEF GRAPH_PIE OPEN_BRACES pie_dec CLOSE_BRACES                            {: addMessage("Graph pie"); :}
+;
+
+bar_dec ::=
+      bar_dec bar_dec_sub
+    | bar_dec_sub
+;
+
+bar_dec_sub ::= 
+      title_dec                         {: addMessage("title declaration bar dec"); :}
+    | x_ax_dec                          {: addMessage("x ax declaration bar dec"); :}
+    | y_ax_dec                          {: addMessage("y_ax_dec bar dec"); :}
+    | merge_dec                         {: addMessage("merge declaration bar dec"); :}
+;
+
+pie_dec	::= 
+      pie_dec pie_dec_sub               
+    | pie_dec_sub                       
+;
+
+pie_dec_sub ::=
+      title_dec                         {: addMessage(" title_dec pie_dec_sub"); :}
+    | type_dec                          {: addMessage(" type_dec pie_dec_sub"); :}
+    | tags_dec                          {: addMessage(" tags_dec pie_dec_sub"); :}
+    | vals_dec                          {: addMessage(" vals_dec pie_dec_sub"); :}
+    | total_dec                         {: addMessage(" total_dec pie_dec_sub"); :}
+    | merge_dec                         {: addMessage(" merge_dec pie_dec_sub"); :}
+    | extra_dec                         {: addMessage(" extra_dec pie_dec_sub"); :}
 ;
 		
-digit ::= NUM_INT
-| NUM_DEC
+title_dec ::= 
+      TITLE_ATTR COLON VAL_ON_COMILLAS:valTitle SEMI_COLON       {: actioner.registTitleDeclaration(cur_token.left,cur_token.right,valTitle.toString());:}
+//    | error SEMI_COLON                                           {: registError(cur_token, "Error al declarar titulo"); :}
+;
+		
+x_ax_dec ::= 
+      X_AXIS_ATTR COLON OPEN_BRACKETS mult_comillas:xAxVals CLOSE_BRACKETS SEMI_COLON         {: actioner.registXAxisDeclaration(cur_token.left, cur_token.right, xAxVals.toString()); :}
+//    | error SEMI_COLON                                                                      {: registError(cur_token, "Error al declarar ejex"); :}
+;	
+		
+y_ax_dec ::= 
+      Y_AXIS_ATTR COLON OPEN_BRACKETS mult_nums:yAxVals CLOSE_BRACKETS SEMI_COLON             {: actioner.registYAxisDeclaration(cur_token.left, cur_token.right, yAxVals.toString()); :}
+;	
+		
+merge_dec ::= 
+    MERGE_ATTR COLON OPEN_BRACKETS mult_braces:items CLOSE_BRACKETS SEMI_COLON          {:
+                                                                                            ArrayList<short[]> tmp = (ArrayList<short[]>)items;
+                                                                                            actioner.registMergeDeclaration(cur_token.left, cur_token.right, tmp);
+                                                                                        :}
+;	
+		
+type_dec ::= 
+      TYPE_ATTR COLON TYPE_CUANT_ATTR SEMI_COLON                                    {: addMessage("type declrataion cuant"); :}
+    | TYPE_ATTR COLON TYPE_PERC_ATTR SEMI_COLON                                     {: addMessage("type declratarion percent"); :}
+;	
+		
+tags_dec ::= 
+    LABEL_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON          {: addMessage("tags declaration"); :}
+;	
+		
+vals_dec ::= 
+    VALUES_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON             {: addMessage("values declrataion"); :}
+;	
+		
+total_dec ::= 
+      TOTAL_ATTR COLON NUM_INT SEMI_COLON                      {: addMessage("total declaration int"); :}
+    | TOTAL_ATTR COLON NUM_DEC SEMI_COLON                      {: addMessage("total declaration dec"); :}
+;	
+		
+extra_dec ::= 
+    EXTRA_ATTR COLON VAL_ON_COMILLAS SEMI_COLON                {: addMessage("extra declaration"); :}
+;	
+		
+mult_comillas ::= 
+      VAL_ON_COMILLAS:valComm                                  {: RESULT = valComm.toString().substring(1,valComm.toString().length() - 1); :}
+    | mult_comillas:lastComm COMMA VAL_ON_COMILLAS:valComm     {: 
+                                                                  String item = valComm.toString().substring(1,valComm.toString().length() - 1); // remove comillas
+                                                                  String items = item + "\n" + lastComm;
+                                                                  RESULT = items;
+                                                               :}
+;	
+		
+mult_nums ::= 
+      arithm:arithVal                                         {: RESULT = Double.valueOf(arithVal.toString()); :}
+    | mult_nums:lastVal COMMA arithm:arithVal                 {:
+                                                                 String item = arithVal.toString();
+                                                                 String items = item + "\n" + lastVal;
+                                                                 RESULT = items; 
+                                                              :}
+;	
+		
+mult_braces ::= 
+      mult_braces:lastVal COMMA brace_conj:val          {:
+                                                            ArrayList<short[]> valActual = (ArrayList<short[]>) val;
+                                                            ArrayList<short[]> values = new ArrayList<>(); // tmp
+                                                            // recover data
+                                                            values.addAll(valActual);
+                                                            values.addAll((ArrayList<short[]>) lastVal);
+                                                            RESULT = values;
+                                                        :}
+    | brace_conj:val                                    {: RESULT =  val; :}
+;	
+		
+brace_conj ::= 
+    OPEN_BRACES NUM_INT:valX COMMA NUM_INT:valY CLOSE_BRACES      {: 
+                                                                     short[] tmp = new short[]{Short.valueOf(valX.toString()), Short.valueOf(valY.toString())}; 
+                                                                     ArrayList<short[]> array = new ArrayList<>();
+                                                                     array.add(tmp);
+                                                                     RESULT = array;
+                                                                  :}
+;
+
+arithm ::=
+      digit:valSingle                                               {: 
+                                                                      RESULT = Double.valueOf(valSingle.toString());
+                                                                    :}
+    | OPEN_PARENTHESIS arithm:valParenth CLOSE_PARENTHESIS          {: RESULT= Double.valueOf(valParenth.toString()); :}
+    | arithm:leftValArithm arithm_sim:symTmp arithm:rightValArithm  {:
+                                                                        Double left = Double.valueOf(leftValArithm.toString());
+                                                                        Double right = Double.valueOf(rightValArithm.toString());
+
+                                                                        switch(Integer.valueOf(symTmp.toString())) {
+                                                                            case sym.ADDITION:
+                                                                                RESULT = left + right;
+                                                                                break;
+                                                                            case sym.SUBSTRACTION:
+                                                                                RESULT = left - right;
+                                                                                break;
+                                                                            case sym.DIVISION:
+                                                                                RESULT = left / right;
+                                                                                break;
+                                                                            case sym.MULTIPLICATION:
+                                                                                RESULT = left *  right;
+                                                                                break;
+                                                                            default:
+                                                                                System.out.println("error");
+                                                                        }
+                                                                    :}
+;
+
+arithm_sim ::=                                                
+      ADDITION                         {: RESULT = sym.ADDITION; :}
+    | SUBSTRACTION                     {: RESULT = sym.SUBSTRACTION; :}
+    | MULTIPLICATION                   {: RESULT = sym.MULTIPLICATION; :}
+    | DIVISION                         {: RESULT = sym.DIVISION; :}
+;
+		
+digit ::= 
+      NUM_INT:numInt                   {: RESULT = Integer.valueOf(numInt.toString()); :}
+    | NUM_DEC:numDec                   {: RESULT = Double.valueOf(numDec.toString()); :}
 ;
