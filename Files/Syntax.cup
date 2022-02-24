@@ -12,15 +12,18 @@ import java.util.ArrayList;
 parser code {:
 
     // for actions
-    ParserActioner actioner = new ParserActioner();
+    private ParserActioner actioner = new ParserActioner();
     // for data save
-    ArrayList<String> stringArray = new ArrayList<>();
     private String messageAnalyz = "";
     int action = 0;
 
     /* CONSTRUCTOR */
     public GraphLangParser(GraphLangLexer lexer) {
         super(lexer);
+    }
+
+    public ParserActioner getActioner() {
+        return this.actioner;
     }
 
     /* ERRORS METHOD */
@@ -37,8 +40,8 @@ parser code {:
             // TODO what to do when file ends
             System.out.println("File read eneded");
         } else {
-//            System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
-//            System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+            System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+            System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
         }
     }
 
@@ -97,7 +100,6 @@ non terminal bar_dec_sub, pie_dec_sub, def_graph_section, def_graph, exec_graph_
 /* precedence */
 precedence left ADDITION, SUBSTRACTION;
 precedence left MULTIPLICATION, DIVISION;
-precedence left arithm, arithm_sim;
 
 
 /**************************************/
@@ -112,22 +114,22 @@ main ::=
 ;
 
 def_graph_section ::=
-      def_graph_section def_graph                                               {: addMessage("multiple graph declaration"); :}
-    | def_graph                                                                 {: addMessage("final graph declaration"); :}
+      def_graph_section def_graph
+    | def_graph
 ;
 
 exec_graph_section ::=
       exec_graph_section exec_graph
-    | exec_graph    
+    | exec_graph
 ;
 
 exec_graph ::=
-    EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS CLOSE_PARENTHESIS SEMI_COLON   {: addMessage("EJECUTAR grafica"); :}
+    EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS CLOSE_PARENTHESIS SEMI_COLON   
 ;
 
 def_graph ::=
       DEF GRAPH_BAR OPEN_BRACES bar_dec CLOSE_BRACES                            {: actioner.saveBarGraphData(); :}
-    | DEF GRAPH_PIE OPEN_BRACES pie_dec CLOSE_BRACES                            {: addMessage("Graph pie"); :}
+    | DEF GRAPH_PIE OPEN_BRACES pie_dec CLOSE_BRACES                            {: actioner.savePieGraphData(); :}
 ;
 
 bar_dec ::=
@@ -136,35 +138,33 @@ bar_dec ::=
 ;
 
 bar_dec_sub ::= 
-      title_dec                         {: addMessage("title declaration bar dec"); :}
-    | x_ax_dec                          {: addMessage("x ax declaration bar dec"); :}
-    | y_ax_dec                          {: addMessage("y_ax_dec bar dec"); :}
-    | merge_dec                         {: addMessage("merge declaration bar dec"); :}
+      title_dec:valTitle                {: actioner.registTitleDeclaration(cur_token.left,cur_token.right,valTitle.toString(), 0); :}
+    | x_ax_dec                          
+    | y_ax_dec                          
+    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 0); :}
 ;
 
 pie_dec	::= 
       pie_dec pie_dec_sub               
-    | pie_dec_sub                       
+    | pie_dec_sub
 ;
 
 pie_dec_sub ::=
-      title_dec                         {: addMessage(" title_dec pie_dec_sub"); :}
-    | type_dec                          {: addMessage(" type_dec pie_dec_sub"); :}
-    | tags_dec                          {: addMessage(" tags_dec pie_dec_sub"); :}
-    | vals_dec                          {: addMessage(" vals_dec pie_dec_sub"); :}
-    | total_dec                         {: addMessage(" total_dec pie_dec_sub"); :}
-    | merge_dec                         {: addMessage(" merge_dec pie_dec_sub"); :}
-    | extra_dec                         {: addMessage(" extra_dec pie_dec_sub"); :}
+      title_dec:valTitle                {: actioner.registTitleDeclaration(cur_token.left,cur_token.right,valTitle.toString(), 1); :}
+    | type_dec                          
+    | tags_dec                          
+    | vals_dec                          
+    | total_dec                         
+    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 1); :}
+    | extra_dec                         
 ;
 		
 title_dec ::= 
-      TITLE_ATTR COLON VAL_ON_COMILLAS:valTitle SEMI_COLON       {: actioner.registTitleDeclaration(cur_token.left,cur_token.right,valTitle.toString());:}
-//    | error SEMI_COLON                                           {: registError(cur_token, "Error al declarar titulo"); :}
+      TITLE_ATTR COLON VAL_ON_COMILLAS:valTitle SEMI_COLON       {: RESULT = valTitle.toString(); :}
 ;
 		
 x_ax_dec ::= 
       X_AXIS_ATTR COLON OPEN_BRACKETS mult_comillas:xAxVals CLOSE_BRACKETS SEMI_COLON         {: actioner.registXAxisDeclaration(cur_token.left, cur_token.right, xAxVals.toString()); :}
-//    | error SEMI_COLON                                                                      {: registError(cur_token, "Error al declarar ejex"); :}
 ;	
 		
 y_ax_dec ::= 
@@ -172,32 +172,29 @@ y_ax_dec ::=
 ;	
 		
 merge_dec ::= 
-    MERGE_ATTR COLON OPEN_BRACKETS mult_braces:items CLOSE_BRACKETS SEMI_COLON          {:
-                                                                                            ArrayList<short[]> tmp = (ArrayList<short[]>)items;
-                                                                                            actioner.registMergeDeclaration(cur_token.left, cur_token.right, tmp);
-                                                                                        :}
+    MERGE_ATTR COLON OPEN_BRACKETS mult_braces:items CLOSE_BRACKETS SEMI_COLON          {: RESULT = (ArrayList<short[]>)items; :}
 ;	
 		
 type_dec ::= 
-      TYPE_ATTR COLON TYPE_CUANT_ATTR SEMI_COLON                                    {: addMessage("type declrataion cuant"); :}
-    | TYPE_ATTR COLON TYPE_PERC_ATTR SEMI_COLON                                     {: addMessage("type declratarion percent"); :}
+      TYPE_ATTR COLON TYPE_CUANT_ATTR SEMI_COLON                                    {: actioner.registTypeDeclaration(cur_token.left, cur_token.right, 0); :}
+    | TYPE_ATTR COLON TYPE_PERC_ATTR SEMI_COLON                                     {: actioner.registTypeDeclaration(cur_token.left, cur_token.right, 1); :}
 ;	
 		
 tags_dec ::= 
-    LABEL_ATTR COLON OPEN_BRACKETS mult_comillas CLOSE_BRACKETS SEMI_COLON          {: addMessage("tags declaration"); :}
+    LABEL_ATTR COLON OPEN_BRACKETS mult_comillas:items CLOSE_BRACKETS SEMI_COLON    {: actioner.registTagsDeclaration(cur_token.left, cur_token.right, items.toString()); :}
 ;	
 		
 vals_dec ::= 
-    VALUES_ATTR COLON OPEN_BRACKETS mult_nums CLOSE_BRACKETS SEMI_COLON             {: addMessage("values declrataion"); :}
+    VALUES_ATTR COLON OPEN_BRACKETS mult_nums:numbers CLOSE_BRACKETS SEMI_COLON     {: actioner.registValuesDeclaration(cur_token.left, cur_token.right, numbers.toString()); :}
 ;	
 		
 total_dec ::= 
-      TOTAL_ATTR COLON NUM_INT SEMI_COLON                      {: addMessage("total declaration int"); :}
-    | TOTAL_ATTR COLON NUM_DEC SEMI_COLON                      {: addMessage("total declaration dec"); :}
+      TOTAL_ATTR COLON NUM_INT:number SEMI_COLON                      {: actioner.registTotalDeclaration(cur_token.left, cur_token.right, Double.valueOf(number.toString())); :}
+    | TOTAL_ATTR COLON NUM_DEC:number SEMI_COLON                      {: actioner.registTotalDeclaration(cur_token.left, cur_token.right, Double.valueOf(number.toString())); :}
 ;	
 		
 extra_dec ::= 
-    EXTRA_ATTR COLON VAL_ON_COMILLAS SEMI_COLON                {: addMessage("extra declaration"); :}
+    EXTRA_ATTR COLON VAL_ON_COMILLAS:val SEMI_COLON                {: actioner.regisExtraDeclaration(cur_token.left, cur_token.right, val.toString().substring(1, val.toString().length() - 1)); :}
 ;	
 		
 mult_comillas ::= 
