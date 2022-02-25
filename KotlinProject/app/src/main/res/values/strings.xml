@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Compi1Prac1</string>
+    <string name="secci_n_de_codigo">Secciòn de codigo</string>
+    <string name="ingresa_tu_codigo_aqui">Ingresa tu codigo aqui</string>
+    <string name="ejecutar">EJECUTAR</string>
+    <string name="test">Test</string>
 </resources>
