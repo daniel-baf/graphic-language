@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class GraphicData {
 
     // for errors
-    protected short titleDecl = 0; // Decl = declaration
-    protected short mergeDecl = 0;
-    protected short errorCounter = 0;
+    protected int titleDecl = 0; // Decl = declaration
+    protected int mergeDecl = 0;
+    protected int errorCounter = 0;
 
     // data
     protected String title;
-    protected ArrayList<short[]> mergeItems;
+    protected ArrayList<int[]> mergeItems;
 
     public GraphicData() {
     }
@@ -23,33 +23,33 @@ public class GraphicData {
     /**
      * is the graphic valid for execute
      *
-     * @return
+     * @return true if the graphic is valid
      */
     public boolean isValidGraph() {
         return errorCounter > 0;
     }
 
-    public short getTitleDecl() {
+    public int getTitleDecl() {
         return titleDecl;
     }
 
-    public void setTitleDecl(short titleDecl) {
+    public void setTitleDecl(int titleDecl) {
         this.titleDecl = titleDecl;
     }
 
-    public short getMergeDecl() {
+    public int getMergeDecl() {
         return mergeDecl;
     }
 
-    public void setMergeDecl(short mergeDecl) {
+    public void setMergeDecl(int mergeDecl) {
         this.mergeDecl = mergeDecl;
     }
 
-    public short getErrorCounter() {
+    public int getErrorCounter() {
         return errorCounter;
     }
 
-    public void setErrorCounter(short errorCounter) {
+    public void setErrorCounter(int errorCounter) {
         this.errorCounter = errorCounter;
     }
 
@@ -61,11 +61,11 @@ public class GraphicData {
         this.title = title;
     }
 
-    public ArrayList<short[]> getMergeItems() {
+    public ArrayList<int[]> getMergeItems() {
         return mergeItems;
     }
 
-    public void setMergeItems(ArrayList<short[]> mergeItems) {
+    public void setMergeItems(ArrayList<int[]> mergeItems) {
         this.mergeItems = mergeItems;
     }
     

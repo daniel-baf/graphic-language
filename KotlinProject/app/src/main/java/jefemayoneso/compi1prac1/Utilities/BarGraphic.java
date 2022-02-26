@@ -11,8 +11,8 @@ package jefemayoneso.compi1prac1.Utilities;
  */
 public class BarGraphic extends GraphicData {
 
-    private short xAxisDecl = 0;
-    private short yAxisDecl = 0;
+    private int xAxisDecl = 0;
+    private int yAxisDecl = 0;
 
     // data
     private String[] xAxisItems;
@@ -21,13 +21,9 @@ public class BarGraphic extends GraphicData {
     public BarGraphic() {
     }
 
-    public BarGraphic(String[] xAxisItems, Double[] yAxisItems) {
-        this.xAxisItems = xAxisItems;
-        this.yAxisItems = yAxisItems;
-    }
-
     @Override
     public boolean isValidGraph() {
+        System.out.println("ERRORES: " + errorCounter);
         if (this.errorCounter > 0) {
             return false;
         }
@@ -36,19 +32,19 @@ public class BarGraphic extends GraphicData {
                 && !this.title.isEmpty();
     }
 
-    public short getxAxisDecl() {
+    public int getxAxisDecl() {
         return xAxisDecl;
     }
 
-    public void setxAxisDecl(short xAxisDecl) {
+    public void setxAxisDecl(int xAxisDecl) {
         this.xAxisDecl = xAxisDecl;
     }
 
-    public short getyAxisDecl() {
+    public int getyAxisDecl() {
         return yAxisDecl;
     }
 
-    public void setyAxisDecl(short yAxisDecl) {
+    public void setyAxisDecl(int yAxisDecl) {
         this.yAxisDecl = yAxisDecl;
     }
 
@@ -68,4 +64,29 @@ public class BarGraphic extends GraphicData {
         this.yAxisItems = yAxisItems;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("\nBarGraphic valid: ").append(isValidGraph());
+        result.append("\nErrores: ").append(this.errorCounter);
+        result.append("\nTitle: ").append(this.title);
+        result.append("\nxAxis: ");
+        for (String tag : xAxisItems) {
+            result.append("\n\t").append(tag);
+        }
+        result.append("\nyAxis: ");
+        for (Double value : yAxisItems) {
+            result.append("\n\t").append(value);
+        }
+        result.append("\nUnir: ");
+        for (int[] merge : mergeItems) {
+            result.append("\n\t{").append(merge[0]).append(",").append(merge[1]).append("}");
+        }
+        result.append("\nDECLARATIONS:");
+        result.append("\n\tyAxis: ").append(yAxisDecl);
+        result.append("\n\txAxis: ").append(yAxisDecl);
+        result.append("\n\tmerge: ").append(mergeDecl);
+        result.append("\n\tTitle: ").append(titleDecl);
+        return result.toString();
+    }
 }

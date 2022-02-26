@@ -50,7 +50,7 @@ parser code {:
     }
 
     public void addMathSymReport(Symbol cur_token) {
-        System.out.println("CurTkn: " + sym.terminalNames[cur_token.sym] + " L:" + sym.terminalNames[cur_token.left.sym] + " R:" + sym.terminalNames[cur_token.right.sym]);
+          actioner.getReportManager().addMathSymbolsReport(sym.terminalNames[cur_token.sym],sym.terminalNames[cur_token.left],sym.terminalNames[cur_token.right]);
     }
 :}
 
@@ -91,7 +91,7 @@ precedence left MULTIPLICATION, DIVISION;
 
 
 /**************************************/
-/********** TYPE 2 GRAMATICS **********/
+/********** TYPE 2 GRAMMAR **********/
 /**************************************/
 
 start with main; // switch man for def_graph_section exec_graph_section
@@ -113,7 +113,7 @@ exec_graph_section ::=
 ;
 
 exec_graph ::=
-    EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS CLOSE_PARENTHESIS SEMI_COLON   
+    EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS:graph CLOSE_PARENTHESIS SEMI_COLON   {: actioner.addGraphToExec(graph.toString()); :}
 ;
 
 def_graph ::=
@@ -131,7 +131,7 @@ bar_dec_sub ::=
       title_dec:valTitle                {: actioner.registTitleDeclaration(cur_token.left,cur_token.right,valTitle.toString(), 0); :}
     | x_ax_dec                          
     | y_ax_dec                          
-    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 0); :}
+    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 0); :}
 ;
 
 pie_dec	::=
@@ -146,7 +146,7 @@ pie_dec_sub ::=
     | tags_dec                          
     | vals_dec                          
     | total_dec                         
-    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 1); :}
+    | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 1); :}
     | extra_dec                         
 ;
 		
@@ -163,7 +163,7 @@ y_ax_dec ::=
 ;	
 		
 merge_dec ::= 
-    MERGE_ATTR COLON OPEN_BRACKETS mult_braces:items CLOSE_BRACKETS SEMI_COLON          {: RESULT = (ArrayList<short[]>)items; :}
+    MERGE_ATTR COLON OPEN_BRACKETS mult_braces:items CLOSE_BRACKETS SEMI_COLON          {: RESULT = (ArrayList<int[]>)items; :}
 ;	
 		
 type_dec ::= 
@@ -208,11 +208,11 @@ mult_nums ::=
 		
 mult_braces ::= 
       mult_braces:lastVal COMMA brace_conj:val          {:
-                                                            ArrayList<short[]> valActual = (ArrayList<short[]>) val;
-                                                            ArrayList<short[]> values = new ArrayList<>(); // tmp
+                                                            ArrayList<int[]> valActual = (ArrayList<int[]>) val;
+                                                            ArrayList<int[]> values = new ArrayList<>(); // tmp
                                                             // recover data
                                                             values.addAll(valActual);
-                                                            values.addAll((ArrayList<short[]>) lastVal);
+                                                            values.addAll((ArrayList<int[]>) lastVal);
                                                             RESULT = values;
                                                         :}
     | brace_conj:val                                    {: RESULT =  val; :}
@@ -220,8 +220,8 @@ mult_braces ::=
 		
 brace_conj ::= 
     OPEN_BRACES NUM_INT:valX COMMA NUM_INT:valY CLOSE_BRACES      {: 
-                                                                     short[] tmp = new short[]{Short.valueOf(valX.toString()), Short.valueOf(valY.toString())}; 
-                                                                     ArrayList<short[]> array = new ArrayList<>();
+                                                                     int[] tmp = new int[]{Integer.valueOf(valX.toString()), Integer.valueOf(valY.toString())};
+                                                                     ArrayList<int[]> array = new ArrayList<>();
                                                                      array.add(tmp);
                                                                      RESULT = array;
                                                                   :}

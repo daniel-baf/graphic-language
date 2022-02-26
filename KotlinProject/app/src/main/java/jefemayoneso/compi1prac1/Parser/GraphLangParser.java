@@ -287,7 +287,7 @@ public class GraphLangParser extends java_cup.runtime.lr_parser {
     }
 
     public void addMathSymReport(Symbol cur_token) {
-        System.out.println("CurTkn: " + sym.terminalNames[cur_token.sym] + " L:" + sym.terminalNames[cur_token.left] + " R:" + sym.terminalNames[cur_token.right]);
+          actioner.getReportManager().addMathSymbolsReport(sym.terminalNames[cur_token.sym],sym.terminalNames[cur_token.left],sym.terminalNames[cur_token.right]);
     }
 
 
@@ -396,7 +396,10 @@ class CUP$GraphLangParser$actions {
           case 8: // exec_graph ::= EXECUTE_ACT OPEN_PARENTHESIS VAL_ON_COMILLAS CLOSE_PARENTHESIS SEMI_COLON 
             {
               Object RESULT =null;
-
+		int graphleft = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).left;
+		int graphright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).right;
+		Object graph = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).value;
+		 actioner.addGraphToExec(graph.toString()); 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("exec_graph",24, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-4)), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -483,7 +486,7 @@ class CUP$GraphLangParser$actions {
 		int tmpleft = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()).left;
 		int tmpright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()).right;
 		Object tmp = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.peek()).value;
-		 actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 0); 
+		 actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 0); 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("bar_dec_sub",19, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -570,7 +573,7 @@ class CUP$GraphLangParser$actions {
 		int tmpleft = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()).left;
 		int tmpright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()).right;
 		Object tmp = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.peek()).value;
-		 actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<short[]>)tmp, 1); 
+		 actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 1); 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("pie_dec_sub",20, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -627,7 +630,7 @@ class CUP$GraphLangParser$actions {
 		int itemsleft = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).left;
 		int itemsright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).right;
 		Object items = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)).value;
-		 RESULT = (ArrayList<short[]>)items; 
+		 RESULT = (ArrayList<int[]>)items; 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("merge_dec",6, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-5)), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -783,11 +786,11 @@ class CUP$GraphLangParser$actions {
 		int valright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()).right;
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.peek()).value;
 		
-                                                            ArrayList<short[]> valActual = (ArrayList<short[]>) val;
-                                                            ArrayList<short[]> values = new ArrayList<>(); // tmp
+                                                            ArrayList<int[]> valActual = (ArrayList<int[]>) val;
+                                                            ArrayList<int[]> values = new ArrayList<>(); // tmp
                                                             // recover data
                                                             values.addAll(valActual);
-                                                            values.addAll((ArrayList<short[]>) lastVal);
+                                                            values.addAll((ArrayList<int[]>) lastVal);
                                                             RESULT = values;
                                                         
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("mult_braces",14, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-2)), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
@@ -817,8 +820,8 @@ class CUP$GraphLangParser$actions {
 		int valYright = ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-1)).right;
 		Object valY = (Object)((java_cup.runtime.Symbol) CUP$GraphLangParser$stack.elementAt(CUP$GraphLangParser$top-1)).value;
 		 
-                                                                     short[] tmp = new short[]{Short.valueOf(valX.toString()), Short.valueOf(valY.toString())}; 
-                                                                     ArrayList<short[]> array = new ArrayList<>();
+                                                                     int[] tmp = new int[]{Integer.valueOf(valX.toString()), Integer.valueOf(valY.toString())};
+                                                                     ArrayList<int[]> array = new ArrayList<>();
                                                                      array.add(tmp);
                                                                      RESULT = array;
                                                                   

@@ -23,7 +23,7 @@ public class BarGraphicActioner {
      */
     public boolean titleDeclaration(String title, BarGraphic barGraph) {
         // add message to errors and set error to object
-        barGraph.setTitleDecl((short) (barGraph.getTitleDecl() + 1)); // title decs ++
+        barGraph.setTitleDecl(barGraph.getTitleDecl() + 1); // title decs ++
         if (barGraph.getTitleDecl() <= 1) {
             // save info for execution
             barGraph.setTitle(title.substring(1, title.length() - 1)); // save info
@@ -39,7 +39,7 @@ public class BarGraphicActioner {
      */
     public boolean xAxisDeclaration(String items, BarGraphic barGraph) {
         // split item with \n for files
-        barGraph.setxAxisDecl((short) (barGraph.getxAxisDecl() + 1)); // x axis dec ++
+        barGraph.setxAxisDecl(barGraph.getxAxisDecl() + 1); // x axis dec ++
         String[] itemsSplit = items.split("\n");
         // validate lenght > 0
         if (barGraph.getxAxisDecl() <= 1 && itemsSplit.length > 0) {
@@ -59,12 +59,12 @@ public class BarGraphicActioner {
         String[] itemsSplit = items.split("\n");
         Double[] numbers = new Double[itemsSplit.length];
         // cast to double
-        barGraph.setyAxisDecl((short) (barGraph.getyAxisDecl() + 1));
-        for (int i = 0; i <= itemsSplit.length; i++) {
+        barGraph.setyAxisDecl(barGraph.getyAxisDecl() + 1);
+        for (int i = 0; i < itemsSplit.length; i++) {
             numbers[i] = Double.valueOf(itemsSplit[i]);
         }
         // validate lenght
-        if (barGraph.getyAxisDecl() < 1 && items.length() > 0) {
+        if (barGraph.getyAxisDecl() <= 1 && items.length() > 0) {
             barGraph.setyAxisItems(numbers);
             return true;
         }
@@ -77,8 +77,8 @@ public class BarGraphicActioner {
      *
      * @param mergeCoordenates the values of x with y to merge
      */
-    public boolean mergeDeclaration(ArrayList<short[]> mergeCoordenates, BarGraphic barGraph) {
-        barGraph.setMergeDecl((short) (barGraph.getMergeDecl() + 1));
+    public boolean mergeDeclaration(ArrayList<int[]> mergeCoordenates, BarGraphic barGraph) {
+        barGraph.setMergeDecl(barGraph.getMergeDecl() + 1);
         if (barGraph.getMergeDecl() <= 1 && mergeCoordenates.size() > 0) {
             barGraph.setMergeItems(mergeCoordenates);
             return true;

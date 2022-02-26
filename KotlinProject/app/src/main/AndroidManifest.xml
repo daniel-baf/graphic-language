@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Compi1Prac1">
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.TypingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GraphSection"
+            android:exported="false" />
+        <activity
+            android:name=".TypingSection"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

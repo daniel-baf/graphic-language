@@ -14,11 +14,11 @@ import androidx.annotation.NonNull;
 public class PieGraphic extends GraphicData {
 
     // for errors
-    private short tagsDecl = 0;
-    private short totalDecl = 0;
-    private short valuesDecl = 0;
-    private short pieTypeDecl = 0; // 0 -> Cantidad, 1 -> Porcentaje
-    private short extraDecl = 0;
+    private int tagsDecl = 0;
+    private int totalDecl = 0;
+    private int valuesDecl = 0;
+    private int pieTypeDecl = 0; // 0 -> Cantidad, 1 -> Porcentaje
+    private int extraDecl = 0;
 
     //data
     private String pieGraphicType;
@@ -38,19 +38,19 @@ public class PieGraphic extends GraphicData {
         this.extra = extra;
     }
 
-    public short getTagsDecl() {
+    public int getTagsDecl() {
         return tagsDecl;
     }
 
-    public void setTagsDecl(short tagsDecl) {
+    public void setTagsDecl(int tagsDecl) {
         this.tagsDecl = tagsDecl;
     }
 
-    public short getTotalDecl() {
+    public int getTotalDecl() {
         return totalDecl;
     }
 
-    public void setTotalDecl(short totalDecl) {
+    public void setTotalDecl(int totalDecl) {
         this.totalDecl = totalDecl;
     }
 
@@ -94,27 +94,27 @@ public class PieGraphic extends GraphicData {
         this.extra = extra;
     }
 
-    public short getValuesDecl() {
+    public int getValuesDecl() {
         return valuesDecl;
     }
 
-    public void setValuesDecl(short valuesDecl) {
+    public void setValuesDecl(int valuesDecl) {
         this.valuesDecl = valuesDecl;
     }
 
-    public short getPieTypeDecl() {
+    public int getPieTypeDecl() {
         return pieTypeDecl;
     }
 
-    public void setPieTypeDecl(short pieTypeDecl) {
+    public void setPieTypeDecl(int pieTypeDecl) {
         this.pieTypeDecl = pieTypeDecl;
     }
 
-    public short getExtraDecl() {
+    public int getExtraDecl() {
         return extraDecl;
     }
 
-    public void setExtraDecl(short extraDecl) {
+    public void setExtraDecl(int extraDecl) {
         this.extraDecl = extraDecl;
     }
 
@@ -149,7 +149,7 @@ public class PieGraphic extends GraphicData {
         result.append("\nTotal: ").append(total);
         result.append("\nExtra: ").append(extra);
         result.append("\nUnir: ");
-        for (short[] merge : mergeItems) {
+        for (int[] merge : mergeItems) {
             result.append("\n\t{").append(merge[0]).append(",").append(merge[1]).append("}");
         }
         result.append("\nDECLARATIONS:");

@@ -16,6 +16,7 @@ public class ParserActioner {
 
     private ArrayList<BarGraphic> barGraphics;
     private ArrayList<PieGraphic> pieGraphics;
+    private ArrayList<String> graphsToExec;
     private final BarGraphicActioner bga;
     private final PieGraphicActioner pga;
     private BarGraphic barGraph;
@@ -30,6 +31,7 @@ public class ParserActioner {
         this.bga = new BarGraphicActioner();
         this.pga = new PieGraphicActioner();
         this.reportManager = new ReportManager();
+        this.graphsToExec = new ArrayList<>();
     }
 
     public void saveBarGraphData() {
@@ -102,7 +104,7 @@ public class ParserActioner {
      * @param col the col of token
      * @param mergeCoordenates the coordinates to save
      */
-    public void registMergeDeclaration(int line, int col, ArrayList<short[]> mergeCoordenates, int graphType) {
+    public void registMergeDeclaration(int line, int col, ArrayList<int[]> mergeCoordenates, int graphType) {
         boolean done = graphType == 0 ? this.bga.mergeDeclaration(mergeCoordenates, this.barGraph) : this.pga.mergeDeclaration(mergeCoordenates, this.pieGraphic);
         if (!done) {
             this.reportManager.addError(line, col, "Declaraciones de union de items", "Hay mas de 1 declaraciones unir", 1);
@@ -180,9 +182,9 @@ public class ParserActioner {
      */
     public void regsitErrorOnGraph(int type) {
         if (type == 0) {
-            this.barGraph.setErrorCounter((short) (this.barGraph.getErrorCounter() + 1));
+            this.barGraph.setErrorCounter(this.barGraph.getErrorCounter() + 1);
         } else {
-            this.pieGraphic.setErrorCounter((short) (this.pieGraphic.getErrorCounter() + 1));
+            this.pieGraphic.setErrorCounter(this.pieGraphic.getErrorCounter() + 1);
         }
     }
 
@@ -190,12 +192,18 @@ public class ParserActioner {
     public ArrayList<PieGraphic> getPieGraphics() {
         return pieGraphics;
     }
+    public ArrayList<BarGraphic> getBarGraphics() {return this.barGraphics; }
 
     public ReportManager getReportManager() {
         return this.reportManager;
     }
 
-    public void setReportManager(ReportManager reportManager) {
-        this.reportManager = reportManager;
+    public void addGraphToExec(String graphTitle) {
+        this.graphsToExec.add(graphTitle.substring(1,graphTitle.length()-1));
     }
+
+    public ArrayList<String> getGraphsToExec() {
+        return this.graphsToExec;
+    }
+
 }
