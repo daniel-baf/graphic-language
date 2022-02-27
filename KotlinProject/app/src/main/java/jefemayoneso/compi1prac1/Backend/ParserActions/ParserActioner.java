@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class ParserActioner {
 
-    private ArrayList<BarGraphic> barGraphics;
-    private ArrayList<PieGraphic> pieGraphics;
-    private ArrayList<String> graphsToExec;
+    private final ArrayList<BarGraphic> barGraphics;
+    private final ArrayList<PieGraphic> pieGraphics;
+    private final ArrayList<String> graphsToExec;
     private final BarGraphicActioner bga;
     private final PieGraphicActioner pga;
     private BarGraphic barGraph;
     private PieGraphic pieGraphic;
-    private ReportManager reportManager;
+    private final ReportManager reportManager;
 
     public ParserActioner() {
         this.barGraphics = new ArrayList<>();
@@ -35,16 +35,21 @@ public class ParserActioner {
     }
 
     public void saveBarGraphData() {
-        // add the graphic
-        this.barGraphics.add(barGraph);
-        this.reportManager.increaseBarGraphicsCounter();
-        this.barGraph = new BarGraphic();
+        this.reportManager.increaseBarGraphicsCounter(); // increase counter
+        if(this.barGraph.isValidGraph(this.reportManager)) {// save graphic data if it is valid
+            this.barGraphics.add(barGraph);
+            System.out.println("Bar graph saved");
+        }
+        this.barGraph = new BarGraphic();// reset object
     }
 
     public void savePieGraphData() {
-        this.pieGraphics.add(pieGraphic);
-        this.reportManager.increasePieGraphicsCounter();
-        this.pieGraphic = new PieGraphic();
+        this.reportManager.increasePieGraphicsCounter(); // increase counter for report
+        if(this.pieGraphic.isValidGraph(this.reportManager)) {
+            this.pieGraphics.add(pieGraphic); // save graphic data when valid and have merge declaration
+            System.out.println("Pie graph saved " + this.pieGraphic.getBarGraphicType());
+        }
+        this.pieGraphic = new PieGraphic(); // reset object
     }
 
     /**

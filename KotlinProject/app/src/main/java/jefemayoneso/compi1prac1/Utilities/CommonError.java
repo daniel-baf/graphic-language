@@ -9,7 +9,7 @@ package jefemayoneso.compi1prac1.Utilities;
  *
  * @author jefemayoneso
  */
-public class SyntaxError {
+public class CommonError {
 
     private int line;
     private int col;
@@ -17,16 +17,16 @@ public class SyntaxError {
     private String message;
     private String lexeme;
 
-    public SyntaxError() {
+    public CommonError() {
     }
 
-    public SyntaxError(int line, int col, String errorType) {
+    public CommonError(int line, int col, String errorType) {
         this.line = line;
         this.col = col;
         this.errorType = errorType;
     }
 
-    public SyntaxError(int line, int col, String errorType, String message, String lexeme) {
+    public CommonError(int line, int col, String errorType, String message, String lexeme) {
         this.line = line;
         this.col = col;
         this.errorType = errorType;

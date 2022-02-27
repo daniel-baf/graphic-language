@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Compi1Prac1">
         <activity
-            android:name=".UI.TypingActivity"
+            android:name=".ReportSection"
             android:exported="false" />
         <activity
             android:name=".GraphSection"

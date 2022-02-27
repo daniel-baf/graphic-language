@@ -2,6 +2,8 @@ package jefemayoneso.compi1prac1.Utilities;
 
 import java.util.ArrayList;
 
+import jefemayoneso.compi1prac1.Backend.ParserActions.ReportManager;
+
 /**
  *
  * @author jefemayoneso
@@ -25,7 +27,7 @@ public class GraphicData {
      *
      * @return true if the graphic is valid
      */
-    public boolean isValidGraph() {
+    public boolean isValidGraph(ReportManager reportManager) {
         return errorCounter > 0;
     }
 

@@ -2,12 +2,12 @@ package jefemayoneso.compi1prac1.Backend.ParserActions;
 
 import java.util.ArrayList;
 
-import jefemayoneso.compi1prac1.Utilities.SyntaxError;
+import jefemayoneso.compi1prac1.Utilities.CommonError;
 
 public class ReportManager {
 
-    private ArrayList<SyntaxError> errors;
-    private ArrayList<String[]> mathOperators;
+    private final ArrayList<CommonError> errors;
+    private final ArrayList<String[]> mathOperators;
     private int barGraphicsCounter;
     private int pieGraphicsCounter;
 
@@ -18,7 +18,7 @@ public class ReportManager {
         this.pieGraphicsCounter = 0;
     }
 
-    public ArrayList<SyntaxError> getErrors() {
+    public ArrayList<CommonError> getErrors() {
         return errors;
     }
 
@@ -52,8 +52,21 @@ public class ReportManager {
      * @param errorType 1 = lexical error, 2 = syntax error
      */
     public void addError(int line, int col, String lexeme, String message, int errorType) {
-        String errType = errorType == 0 ? "lexico" : "sintactico";
-        this.errors.add(new SyntaxError(line, col, errType, message, lexeme));
+        String errType;
+        switch (errorType) {
+            case 1:
+                errType = "Lexico";
+                break;
+            case 2:
+                errType = "Sintactico";
+                break;
+            case 3:
+                errType = "Semantico";
+                break;
+            default:
+                errType = "unexpected";
+        }
+        this.errors.add(new CommonError(line, col, errType, message, lexeme));
     }
 
     public void addMathSymbolsReport(String previousTkn, String actualTkn, String nextTokn) {

@@ -8,10 +8,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import jefemayoneso.compi1prac1.Utilities.BarGraphic
-import java.util.*
 import kotlin.collections.ArrayList
 
-public class BarGraphDrawer {
+class BarGraphDrawer {
 
     private lateinit var barList: ArrayList<BarEntry>
     private lateinit var barDataSet: BarDataSet
@@ -20,19 +19,16 @@ public class BarGraphDrawer {
     /**
      * this method draw a graphic once it is valid
      */
-    public fun drawBar(bar: BarGraphic, context: Context):BarChart {
-
-        // x indicators
-
-        val barChart: BarChart = BarChart(context)
+    fun drawBar(bar: BarGraphic, context: Context):BarChart {
+        val barChart = BarChart(context)
         try {
             barList = ArrayList() // start list of tablesz
             // add bars
             var yVal: Float
             var xVal:String
             for ((iterator, merge) in bar.mergeItems.withIndex()) {
-                yVal = bar.getyAxisItems()[merge[1].toInt()].toFloat() // the size
-                xVal = bar.getxAxisItems()[merge[0].toInt()] // data to represent
+                yVal = bar.getyAxisItems()[merge[1]].toFloat() // the size
+                xVal = bar.getxAxisItems()[merge[0]] // data to represent
                 val barEntry = BarEntry(iterator.toFloat(),yVal, xVal) // save data and increase iterator
                 barEntry.describeContents()
                 barList.add(barEntry) // save data and increase iterator
@@ -47,6 +43,7 @@ public class BarGraphDrawer {
             // save data
             barChart.setFitBars(true)
             barChart.data = barData// apply data to chart
+            barChart.description.isEnabled = true
             // customization
             barChart.minimumHeight = 1000
             barChart.description.text = bar.title
@@ -54,9 +51,11 @@ public class BarGraphDrawer {
             barChart.setDrawValueAboveBar(true)
             barChart.setDrawGridBackground(true)
             // axis
+            // TODO use axisIterators for custom x axis
         } catch (ex: java.lang.Exception) {
             println("ERROR AL CREAR GRAFICO: $ex")
         }
-        return barChart;
+        return barChart
     }
+
 }

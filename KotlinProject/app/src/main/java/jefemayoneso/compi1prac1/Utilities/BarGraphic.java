@@ -5,6 +5,12 @@
  */
 package jefemayoneso.compi1prac1.Utilities;
 
+import androidx.annotation.NonNull;
+
+import java.util.Objects;
+
+import jefemayoneso.compi1prac1.Backend.ParserActions.ReportManager;
+
 /**
  *
  * @author jefemayoneso
@@ -22,14 +28,20 @@ public class BarGraphic extends GraphicData {
     }
 
     @Override
-    public boolean isValidGraph() {
-        System.out.println("ERRORES: " + errorCounter);
+    public boolean isValidGraph(ReportManager reportManager) {
         if (this.errorCounter > 0) {
             return false;
         }
+        try {
+            if(this.title.isEmpty()) {
+                reportManager.addError(-1,-1,"Grafica barra","El titulo de la grafica no puede estar vacio",3);
+                return false;
+            }
+        }catch (Exception e) {
+            return false;
+        }
         return this.xAxisDecl == 1 && this.yAxisDecl == 1
-                && this.titleDecl == 1 && this.mergeDecl <= 1 && this.title != null
-                && !this.title.isEmpty();
+                && this.titleDecl == 1 && this.mergeDecl == 1;
     }
 
     public int getxAxisDecl() {
@@ -64,10 +76,11 @@ public class BarGraphic extends GraphicData {
         this.yAxisItems = yAxisItems;
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("\nBarGraphic valid: ").append(isValidGraph());
+        result.append("\nBarGraphic");
         result.append("\nErrores: ").append(this.errorCounter);
         result.append("\nTitle: ").append(this.title);
         result.append("\nxAxis: ");

@@ -3,20 +3,20 @@ package jefemayoneso.compi1prac1
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
-import com.github.mikephil.charting.charts.BarChart
 import jefemayoneso.compi1prac1.Lexer.GraphLangLexer
 import jefemayoneso.compi1prac1.Parser.GraphLangParser
 import jefemayoneso.compi1prac1.UI.BarGraphDrawer
+import jefemayoneso.compi1prac1.UI.PieGraphDrawer
 import jefemayoneso.compi1prac1.Utilities.BarGraphic
+import jefemayoneso.compi1prac1.Utilities.PieGraphic
 import java.io.StringReader
 
 class GraphSection : AppCompatActivity() {
 
-    private lateinit var barDrawer: BarGraphDrawer;
+    private lateinit var barDrawer: BarGraphDrawer
+    private lateinit var pieDrawer: PieGraphDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +24,7 @@ class GraphSection : AppCompatActivity() {
         addListeners()
         val data =  intent.getStringExtra("data")
         barDrawer = BarGraphDrawer()
+        pieDrawer = PieGraphDrawer()
         // analyze
         startAnalysis(data.toString())
         // validate graphics
@@ -42,7 +43,7 @@ class GraphSection : AppCompatActivity() {
         // execute
         try {
             parser.parse() // start syntax analysis
-            drawGraphics(parser.actioner.barGraphics,parser.actioner.graphsToExec) // exec graphic
+            drawGraphics(parser.actioner.barGraphics,parser.actioner.graphsToExec, parser.actioner.pieGraphics) // exec graphic
         } catch (ex: Exception) {
             // TODO SHOW ERROR MESSAGE
             println("ERROR ON CODE PRINT: $ex")
@@ -50,25 +51,27 @@ class GraphSection : AppCompatActivity() {
         }
     }
 
-    private fun drawGraphics(bars: ArrayList<BarGraphic>, toDraw: ArrayList<String>) {
+    private fun drawGraphics(bars: ArrayList<BarGraphic>, toDraw: ArrayList<String>, pies: ArrayList<PieGraphic>) {
         // get liens
         val llGraphics = findViewById<LinearLayout>(R.id.infoLayout)
-        val llTitle = TextView(this) // the title for container
         // create multiple divs for pie graphic
-        val iterator = 0;
         for(title in toDraw) {// look into all graphics values
             for (bar in bars) {// look for bar instance
-                // look if the actual graphic is valid
-                if(bar.isValidGraph && bar.mergeDecl.equals(1) && bar.title.equals(title)) {
+                // at this point, we assume each possible error is already declared, so report manager = null
+                if(bar.isValidGraph(null) && bar.title.equals(title)) {
                     val barChart = this.barDrawer.drawBar(bar,this) // create the BarCHart
                     barChart.minimumHeight = 1000
                     llGraphics.addView(barChart) // add graphic
-                } else {
-                    Log.i("drawing","Graph no valid")
+                }
+            }
+            for(pie in pies) {
+                if(pie.isValidGraph(null) && pie.title.equals(title)) {
+                    val pieChart = this.pieDrawer.drawPie(this,pie)
+                    pieChart.minimumHeight = 1000
+                    llGraphics.addView(pieChart)
                 }
             }
         }
-        // give height
     }
 
     private fun returnTypingSection() {

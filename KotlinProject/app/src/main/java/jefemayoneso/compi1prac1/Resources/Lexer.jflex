@@ -1,10 +1,15 @@
+/***************************************/
+/********** USER CODE SECTION **********/
+/***************************************/
 
-/*SECTION 1: user code*/
 package jefemayoneso.compi1prac1.Lexer;
 import java_cup.runtime.*;
 import jefemayoneso.compi1prac1.Parser.sym;
+import java.util.ArrayList;
 
-/*SECTION 2: configurations*/
+/***************************************/
+/**********   CONFIGURATION   **********/
+/***************************************/
 %%
 %class GraphLangLexer
 %type java_cup.runtime.Symbol
@@ -13,6 +18,21 @@ import jefemayoneso.compi1prac1.Parser.sym;
 %line
 %column
 %public
+
+// USER CODE
+
+%{
+    private ArrayList<char[]> mathSymTknsPos = new ArrayList<>();
+
+    private void saveInfMathTkn(char left, char current, char right) {
+        mathSymTknsPos.add(new char[]{left, current, right});
+    }
+
+    public ArrayList<char[]> getMathSymTknsPos() {
+        return mathSymTknsPos;
+    }
+
+%}
 
 /** DEFINE LANGUAGE **/
 Letter=[a-zA-Z]+ // letters
@@ -58,16 +78,16 @@ whitespace=[\s\t\r\n]+ // whitespace
 /************************************************************/
 
 /* ADITION */
-("+")               {return new Symbol(sym.ADDITION, yyline + 1, yycolumn + 1);}
+("+")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.ADDITION, yyline + 1, yycolumn + 1);}
 /* SUBSTRACTION */
-("-")               {return new Symbol(sym.SUBSTRACTION, yyline + 1, yycolumn + 1);}
+("-")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.SUBSTRACTION, yyline + 1, yycolumn + 1);}
 /* MULTIPLICATION */
-("*")               {return new Symbol(sym.MULTIPLICATION, yyline + 1, yycolumn + 1);}
+("*")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.MULTIPLICATION, yyline + 1, yycolumn + 1);}
 /* DIVISION */
-("/")               {return new Symbol(sym.DIVISION, yyline + 1, yycolumn + 1);}
+("/")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.DIVISION, yyline + 1, yycolumn + 1);}
 /* PARENTHESIS */
-("(")               {return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);}
-(")")               {return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);}
+("(")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);}
+(")")               {saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);}
 
 /******************************************************/
 /******************* reserved words *******************/

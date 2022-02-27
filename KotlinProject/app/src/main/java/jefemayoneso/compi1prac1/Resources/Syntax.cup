@@ -5,6 +5,7 @@
 package jefemayoneso.compi1prac1.Parser;
 
 import java_cup.runtime.*;
+import java.util.List;
 import jefemayoneso.compi1prac1.Lexer.GraphLangLexer;
 import jefemayoneso.compi1prac1.Backend.ParserActions.ParserActioner;
 import java.util.ArrayList;
@@ -38,8 +39,13 @@ parser code {:
             // TODO what to do when file ends
             System.out.println("File read eneded");
         } else {
-            System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
-            System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+            List tokens = expected_token_ids();
+            // printk("Error en simbolo: " + sym.terminalNames[cur_token.sym] + " L:" + cur_token.left + " C:" +  cur_token.right);
+            // printk("    Se esperaba: " + tokens.size());
+            // tokens.forEach(token -> {
+            //     printk((String) token);
+            // });
+            // actioner.getReportManager().addError();
         }
     }
 
@@ -89,7 +95,6 @@ non terminal bar_dec_sub, pie_dec_sub, def_graph_section, def_graph, exec_graph_
 precedence left ADDITION, SUBSTRACTION;
 precedence left MULTIPLICATION, DIVISION;
 
-
 /**************************************/
 /********** TYPE 2 GRAMMAR **********/
 /**************************************/
@@ -97,8 +102,9 @@ precedence left MULTIPLICATION, DIVISION;
 start with main; // switch man for def_graph_section exec_graph_section
 
 main ::= 
-        def_graph_section exec_graph_section
-      | def_graph_section 
+      def_graph_section exec_graph_section
+    | def_graph_section
+    | exec_graph_section
 ;
 
 def_graph_section ::=
@@ -124,7 +130,6 @@ def_graph ::=
 bar_dec ::=
       bar_dec bar_dec_sub
     | bar_dec_sub
-    | error 
 ;
 
 bar_dec_sub ::= 
@@ -132,12 +137,12 @@ bar_dec_sub ::=
     | x_ax_dec                          
     | y_ax_dec                          
     | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 0); :}
+    | error
 ;
 
 pie_dec	::=
       pie_dec_sub 
     | pie_dec pie_dec_sub               
-    | error 
 ;
 
 pie_dec_sub ::=
@@ -148,6 +153,7 @@ pie_dec_sub ::=
     | total_dec                         
     | merge_dec:tmp                     {: actioner.registMergeDeclaration(cur_token.left, cur_token.right, (ArrayList<int[]>)tmp, 1); :}
     | extra_dec                         
+    | error
 ;
 		
 title_dec ::= 

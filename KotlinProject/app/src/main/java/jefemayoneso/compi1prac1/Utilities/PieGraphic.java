@@ -7,6 +7,8 @@ package jefemayoneso.compi1prac1.Utilities;
 
 import androidx.annotation.NonNull;
 
+import jefemayoneso.compi1prac1.Backend.ParserActions.ReportManager;
+
 /**
  *
  * @author jefemayoneso
@@ -28,14 +30,6 @@ public class PieGraphic extends GraphicData {
     private String extra;
 
     public PieGraphic() {
-    }
-
-    public PieGraphic(String pieGraphicType, String[] tags, Double[] values, Double total, String extra) {
-        this.pieGraphicType = pieGraphicType;
-        this.tags = tags;
-        this.values = values;
-        this.total = total;
-        this.extra = extra;
     }
 
     public int getTagsDecl() {
@@ -119,14 +113,28 @@ public class PieGraphic extends GraphicData {
     }
 
     @Override
-    public boolean isValidGraph() {
-        if (this.errorCounter > 0) {
-            return false;
-        } if(this.pieGraphicType.equals("Porcentaje") && this.pieTypeDecl > 0) {
+    public boolean isValidGraph(ReportManager reportManager) {
+        if (this.errorCounter > 0) { // error detected while declarations, this errors are validated externally
             return false;
         }
+        try {
+            if(!isTotalValuesValid()) {
+                reportManager.addError(-1,-1,"Grafica Pie", "La suma de valores de la grafica "+ this.title + " no coincide con el total delcarado",3);
+                System.out.println("TOTAL NOT MATCH");
+                return false;
+            }else if (this.pieGraphicType.equals("Porcentaje") && this.totalDecl > 0) { // declared title when type = percentage
+                reportManager.addError(-1,-1,"Grafica Pie","La grafica " + this.title + "Ha sido declarada como Porcentaje y tiene almenos 1 declaracion de total",3);
+                return false; // this has to be declared 0 times if type is Porcentaje
+            } else if(this.pieGraphicType.equals("Cantidad") && this.pieTypeDecl != 1 && this.total != 1) {
+                reportManager.addError(-1,-1,"Grafica Pie","La grafica " + this.title + " es de tipo Cantidad y debe tener solamente 1 declaracion de tipo y 1 de total",3);
+                return false; // need to be declared 1 time the title when type is Cantidad
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        // validate more
         return (this.titleDecl == 1 && pieTypeDecl == 1 && tagsDecl == 1 && valuesDecl == 1
-                && this.totalDecl <= 1 && this.mergeDecl == 1 && this.extraDecl <= 1);
+                && this.extraDecl <= 1 && this.totalDecl <= 1 && this.mergeDecl == 1 );
     }
 
     // method to print the info of the object
@@ -134,7 +142,7 @@ public class PieGraphic extends GraphicData {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("\nPieGraphic valid: ").append(isValidGraph());
+        result.append("\nPieGraphic valid: ");
         result.append("\nErrores: ").append(this.errorCounter);
         result.append("\nTitle: ").append(this.title);
         result.append("\nType: ").append(pieGraphicType);
@@ -160,5 +168,17 @@ public class PieGraphic extends GraphicData {
         result.append("\n\tExtra: ").append(extraDecl);
         result.append("\n\tTitle: ").append(titleDecl);
         return result.toString();
+    }
+
+    private boolean isTotalValuesValid() {
+        if(this.pieGraphicType.equals("Cantidad")) {
+            int tmp = 0;
+            for (Double tot: this.values) {
+                tmp+=tot;
+            }
+            return tmp == this.total;
+        } else {
+            return true;
+        }
     }
 }
