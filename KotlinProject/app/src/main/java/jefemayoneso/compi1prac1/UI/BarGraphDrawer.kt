@@ -3,6 +3,8 @@ package jefemayoneso.compi1prac1.UI
 import android.content.Context
 import android.graphics.Color
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -23,6 +25,7 @@ class BarGraphDrawer {
      */
     fun drawBar(bar: BarGraphic, context: Context, reportManager: ReportManager):BarChart {
         val barChart = BarChart(context)
+        val xAxisList = Array<String>(bar.getxAxisItems().size){""}
         try {
             barList = ArrayList() // start list of tablesz
             // add bars
@@ -32,6 +35,7 @@ class BarGraphDrawer {
                 try {
                     yVal = bar.getyAxisItems()[merge[1]].toFloat() // the size
                     xVal = bar.getxAxisItems()[merge[0]] // data to represent
+                    xAxisList[iterator] = (xVal)
                     val barEntry = BarEntry(iterator.toFloat(),yVal, xVal) // save data and increase iterator
                     barList.add(barEntry) // save data and increase iterator
                 } catch (ex: Exception) {
@@ -53,6 +57,7 @@ class BarGraphDrawer {
             barChart.description.text = bar.title
             barChart.animateY(1200)
             // axis
+            legend(barChart,xAxisList)
             // TODO use axisIterators for custom x axis
         } catch (ex: Exception) {
             println("ERROR AL CREAR GRAFICO: $ex")
@@ -60,4 +65,19 @@ class BarGraphDrawer {
         return barChart
     }
 
+    private fun legend(chart: BarChart, columns: Array<String>) {
+        val legend = chart.legend
+        legend.form = Legend.LegendForm.CIRCLE
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        val entries = ArrayList<LegendEntry>()
+
+        for ((iterator, entry) in columns.withIndex()) {
+            val entryT = LegendEntry()
+            entryT.formColor = ColorTemplate.MATERIAL_COLORS.get(iterator)
+            entryT.label = columns.get(iterator)
+            entries.add(entryT)
+        }
+
+        legend.setCustom(entries)
+    }
 }
