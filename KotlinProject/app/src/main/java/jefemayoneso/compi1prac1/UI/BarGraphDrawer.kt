@@ -7,7 +7,9 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import jefemayoneso.compi1prac1.Backend.ParserActions.ReportManager
 import jefemayoneso.compi1prac1.Utilities.BarGraphic
+import java.lang.Exception
 import kotlin.collections.ArrayList
 
 class BarGraphDrawer {
@@ -19,7 +21,7 @@ class BarGraphDrawer {
     /**
      * this method draw a graphic once it is valid
      */
-    fun drawBar(bar: BarGraphic, context: Context):BarChart {
+    fun drawBar(bar: BarGraphic, context: Context, reportManager: ReportManager):BarChart {
         val barChart = BarChart(context)
         try {
             barList = ArrayList() // start list of tablesz
@@ -27,10 +29,14 @@ class BarGraphDrawer {
             var yVal: Float
             var xVal:String
             for ((iterator, merge) in bar.mergeItems.withIndex()) {
-                yVal = bar.getyAxisItems()[merge[1]].toFloat() // the size
-                xVal = bar.getxAxisItems()[merge[0]] // data to represent
-                val barEntry = BarEntry(iterator.toFloat(),yVal, xVal) // save data and increase iterator
-                barList.add(barEntry) // save data and increase iterator
+                try {
+                    yVal = bar.getyAxisItems()[merge[1]].toFloat() // the size
+                    xVal = bar.getxAxisItems()[merge[0]] // data to represent
+                    val barEntry = BarEntry(iterator.toFloat(),yVal, xVal) // save data and increase iterator
+                    barList.add(barEntry) // save data and increase iterator
+                } catch (ex: Exception) {
+                    reportManager.addError(-1,-1,"UNIR","No se puede unir {" + merge[0] + "," + merge[1] + "}",3)
+                }
             }
             // add the info to data set
             barDataSet = BarDataSet(barList, bar.title)// merge bars
@@ -48,7 +54,7 @@ class BarGraphDrawer {
             barChart.animateY(1200)
             // axis
             // TODO use axisIterators for custom x axis
-        } catch (ex: java.lang.Exception) {
+        } catch (ex: Exception) {
             println("ERROR AL CREAR GRAFICO: $ex")
         }
         return barChart

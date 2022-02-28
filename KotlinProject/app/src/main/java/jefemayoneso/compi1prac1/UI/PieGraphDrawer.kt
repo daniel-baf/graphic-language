@@ -7,6 +7,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import jefemayoneso.compi1prac1.Backend.ParserActions.ReportManager
 import jefemayoneso.compi1prac1.Utilities.PieGraphic
 import java.lang.Exception
 
@@ -16,7 +17,7 @@ class PieGraphDrawer {
     lateinit var pieData: PieData
     lateinit var pieList: ArrayList<PieEntry>
 
-    fun drawPie(context: Context, pie: PieGraphic): PieChart {
+    fun drawPie(context: Context, pie: PieGraphic, reportManager: ReportManager): PieChart {
         // validate the type
         switchDataGraph(pie)
         // variables
@@ -26,8 +27,12 @@ class PieGraphDrawer {
             // add data
             var value: Float
             for (entry in pie.mergeItems) {
-                value = pie.values[entry[0]].toFloat() // get the value
-                pieList.add(PieEntry(value,pie.tags[entry[1]]))
+                try {
+                    value = pie.values[entry[0]].toFloat() // get the value
+                    pieList.add(PieEntry(value,pie.tags[entry[1]]))
+                } catch (ex: Exception) {
+                    reportManager.addError(-1,-1,"Unir","No se puede unir las celdas {" + entry[0] + "," + entry[1] + "}",3)
+                }
             }
             pieDataSet = PieDataSet(pieList,pie.title) // add the data to model
             // customization

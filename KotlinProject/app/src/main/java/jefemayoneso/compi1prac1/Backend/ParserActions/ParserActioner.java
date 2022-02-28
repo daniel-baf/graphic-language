@@ -41,6 +41,7 @@ public class ParserActioner {
             System.out.println("Bar graph saved");
         }
         this.barGraph = new BarGraphic();// reset object
+        this.pieGraphic = new PieGraphic();
     }
 
     public void savePieGraphData() {
@@ -50,6 +51,7 @@ public class ParserActioner {
             System.out.println("Pie graph saved " + this.pieGraphic.getBarGraphicType());
         }
         this.pieGraphic = new PieGraphic(); // reset object
+        this.barGraph = new BarGraphic();
     }
 
     /**
@@ -191,6 +193,12 @@ public class ParserActioner {
         } else {
             this.pieGraphic.setErrorCounter(this.pieGraphic.getErrorCounter() + 1);
         }
+    }
+
+    public void registErrorOnGraph() {// when syntax Error Ocurred and don't know where to save Error
+        // validate for active graph
+        this.barGraph.setErrorCounter(this.barGraph.getErrorCounter() + 1);
+        this.pieGraphic.setErrorCounter(this.pieGraphic.getErrorCounter() + 1);
     }
 
     // getters and setters

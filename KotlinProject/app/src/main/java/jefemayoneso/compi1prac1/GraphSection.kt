@@ -45,7 +45,7 @@ class GraphSection : AppCompatActivity() {
         try {
             parser.parse() // start syntax analysis
             // save data of numbers in lexer
-            drawGraphics(parser.actioner.barGraphics,parser.actioner.graphsToExec, parser.actioner.pieGraphics) // exec graphic
+            drawGraphics(parser.actioner.barGraphics,parser.actioner.graphsToExec, parser.actioner.pieGraphics, parser.actioner.reportManager) // exec graphic
             parser.actioner.reportManager.mathOperators = lexer.mathSymTknsPos
             parser.actioner.reportManager.addError(lexer.errors)
         } catch (ex: Exception) {
@@ -55,7 +55,7 @@ class GraphSection : AppCompatActivity() {
         }
     }
 
-    private fun drawGraphics(bars: ArrayList<BarGraphic>, toDraw: ArrayList<String>, pies: ArrayList<PieGraphic>) {
+    private fun drawGraphics(bars: ArrayList<BarGraphic>, toDraw: ArrayList<String>, pies: ArrayList<PieGraphic>, reportManager: ReportManager) {
         // get liens
         val llGraphics = findViewById<LinearLayout>(R.id.infoLayout)
         // create multiple divs for pie graphic
@@ -64,14 +64,14 @@ class GraphSection : AppCompatActivity() {
                 for (bar in bars) {// look for bar instance
                     // at this point, we assume each possible error is already declared, so report manager = null
                     if(bar.isValidGraph(null) && bar.title.equals(title)) {
-                        val barChart = this.barDrawer.drawBar(bar,this) // create the BarCHart
+                        val barChart = this.barDrawer.drawBar(bar,applicationContext, reportManager) // create the BarCHart
                         barChart.minimumHeight = 1000
                         llGraphics.addView(barChart) // add graphic
                     }
                 }
                 for(pie in pies) {
                     if(pie.isValidGraph(null) && pie.title.equals(title)) {
-                        val pieChart = this.pieDrawer.drawPie(this,pie)
+                        val pieChart = this.pieDrawer.drawPie(applicationContext,pie,reportManager)
                         pieChart.minimumHeight = 1000
                         llGraphics.addView(pieChart)
                     }

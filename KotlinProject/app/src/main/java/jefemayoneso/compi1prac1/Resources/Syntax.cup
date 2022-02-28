@@ -44,6 +44,7 @@ parser code {:
               for(Object token: tokens) {
                 message +="\n" + sym.terminalNames[(int) token];
               }
+              actioner.registErrorOnGraph();
               actioner.getReportManager().addError(cur_token.left,cur_token.right,cur_token.value.toString(), message,2);
             }
           } catch (Exception e) {}
@@ -91,6 +92,7 @@ non terminal bar_dec_sub, pie_dec_sub, def_graph_section, def_graph, exec_graph_
 /* precedence */
 precedence left ADDITION, SUBSTRACTION;
 precedence left MULTIPLICATION, DIVISION;
+precedence left OPEN_PARENTHESIS, VAL_ON_COMILLAS, CLOSE_PARENTHESIS, EXECUTE_ACT, SEMI_COLON, DEF, GRAPH_PIE, OPEN_BRACES, CLOSE_BRACES;
 
 /**************************************/
 /********** TYPE 2 GRAMMAR **********/
@@ -107,7 +109,8 @@ main ::=
 def_graph_section ::=
       def_graph_section def_graph
     | def_graph
-    | error
+    | error exec_graph_section
+    | error def_graph_section
 ;
 
 exec_graph_section ::=
