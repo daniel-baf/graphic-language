@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Compi1Prac1</string>
+    <string name="app_name">Graficadora</string>
     <string name="secci_n_de_codigo">Sección de codigo</string>
     <string name="ingresa_tu_codigo_aqui">Ingresa tu codigo aqui</string>
     <string name="ejecutar">EJECUTAR</string>
@@ -103,4 +103,9 @@
     <string name="rerorte2">RERORTE2</string>
     <string name="simbolos_juntos_a_signos_aritmeticos">Simbolos juntos a signos aritmeticos</string>
     <string name="textview">TextView</string>
+    <string name="reporte_simbolos_aritmeticos">REPORTE SIMBOLOS ARITMETICOS</string>
+    <string name="declaraciones">Declaraciones</string>
+    <string name="_0">0</string>
+    <string name="reporte_erroes">REPORTE ERROES</string>
+    <string name="reporte_de_errores">REPORTE DE ERRORES</string>
 </resources>

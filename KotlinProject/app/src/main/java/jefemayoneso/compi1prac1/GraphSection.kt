@@ -47,6 +47,7 @@ class GraphSection : AppCompatActivity() {
             // save data of numbers in lexer
             drawGraphics(parser.actioner.barGraphics,parser.actioner.graphsToExec, parser.actioner.pieGraphics) // exec graphic
             parser.actioner.reportManager.mathOperators = lexer.mathSymTknsPos
+            parser.actioner.reportManager.addError(lexer.errors)
         } catch (ex: Exception) {
             // TODO SHOW ERROR MESSAGE
             println("ERROR ON CODE PRINT: $ex")

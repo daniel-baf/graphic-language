@@ -89,4 +89,8 @@ public class ReportManager implements Serializable {
     public void setMathOperators(ArrayList<char[]> mathOperators) {
         this.mathOperators = mathOperators;
     }
+
+    public void addError(ArrayList<CommonError> errors) {
+        this.errors.addAll(errors);
+    }
 }

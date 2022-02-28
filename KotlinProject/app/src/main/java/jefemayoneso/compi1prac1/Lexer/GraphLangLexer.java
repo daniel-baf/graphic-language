@@ -8,6 +8,7 @@ package jefemayoneso.compi1prac1.Lexer;
 import java_cup.runtime.*;
 import jefemayoneso.compi1prac1.Parser.sym;
 import java.util.ArrayList;
+import jefemayoneso.compi1prac1.Utilities.CommonError;
 
 /***************************************/
 /**********   CONFIGURATION   **********/
@@ -309,6 +310,7 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
 
   /* user code: */
     private ArrayList<char[]> mathSymTknsPos = new ArrayList<>();
+    private ArrayList<CommonError> errors = new ArrayList<>();
 
     private void saveInfMathTkn() {
         char L = ' ';
@@ -316,7 +318,6 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
         char C = ' ';
         try {
             C = yycharat(0);
-
         } catch(Exception e) {
             System.out.println("ERROR getting char at Lexer class");
         }
@@ -333,9 +334,15 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
         }
         mathSymTknsPos.add(new char[]{L, C, R});
     }
-
     public ArrayList<char[]> getMathSymTknsPos() {
         return mathSymTknsPos;
+    }
+    public ArrayList<CommonError> getErrors() {
+        return errors;
+    }
+
+    private void addError() {
+      this.errors.add(new CommonError(yyline, yycolumn, "Lexico","Caracter no reconocido",yytext()));
     }
 
 
@@ -724,7 +731,7 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return new Symbol(sym.ERROR, yyline + 1, yycolumn + 1, yytext());
+            { addError(); return new Symbol(sym.ERROR, yyline + 1, yycolumn + 1, yytext());
             } 
             // fall through
           case 35: break;

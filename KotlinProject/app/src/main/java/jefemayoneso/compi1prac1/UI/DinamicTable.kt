@@ -5,12 +5,13 @@ import android.widget.TableLayout
 import android.widget.TextView
 import android.view.Gravity
 import android.widget.TableRow
+import androidx.core.view.marginRight
 import jefemayoneso.compi1prac1.Utilities.CommonError
 import java.util.ArrayList
 
 class DinamicTable(private val layout: TableLayout, private val context: Context) {
     private lateinit var headers: Array<String>
-    private var data: ArrayList<Array<String>>? = null
+    private var data: ArrayList<Array<String>> = ArrayList<Array<String>>()
     private var tableRow: TableRow? = null
     private var txtCell: TextView? = null
     private var indexC = 0
@@ -21,7 +22,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
         createHeader()
     }
 
-    fun addData(data: ArrayList<Array<String>>?) {
+    fun addData(data: ArrayList<Array<String>>) {
         this.data = data
         createDataTable()
     }
@@ -33,7 +34,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
     private fun newCell() {
         txtCell = TextView(context)
         txtCell!!.gravity = Gravity.CENTER
-        txtCell!!.textSize = 10f
+        txtCell!!.textSize = 16f
     }
 
     private fun createHeader() {
@@ -42,7 +43,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
         while (indexC < headers.size) {
             newCell()
             txtCell!!.text = headers[indexC++]
-            tableRow!!.addView(txtCell)
+            tableRow!!.addView(txtCell, newTableRowParams())
         }
         layout.addView(tableRow)
     }
@@ -50,7 +51,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
     private fun createDataTable() {
         var info: String
         indexR = 1
-        while (indexR <= headers.size) {
+        while (indexR <= data.size) {
             newRow()
             indexC = 0
             while (indexC <= headers.size) {
@@ -58,7 +59,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
                 val cols = data!![indexR - 1]
                 info = if(indexC < cols.size) cols[indexC] else ""
                 txtCell!!.text = info
-                 tableRow!!.addView(txtCell, newTableRowParams())
+                tableRow!!.addView(txtCell, newTableRowParams())
                 indexC++
             }
             layout.addView(tableRow)
@@ -68,7 +69,7 @@ class DinamicTable(private val layout: TableLayout, private val context: Context
 
     private fun newTableRowParams(): TableRow.LayoutParams {
         val params = TableRow.LayoutParams()
-        params.setMargins(1, 1, 1, 1)
+        params.setMargins(10, 10, 10, 10)
         params.weight = 1f
         return params
     }

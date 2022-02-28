@@ -35,18 +35,18 @@ parser code {:
     }
 
     public void syntax_error(Symbol cur_token) {
-        if(cur_token.sym == sym.EOF) {
-            // TODO what to do when file ends
-            System.out.println("File read eneded");
-        } else {
-            List tokens = expected_token_ids();
-            // printk("Error en simbolo: " + sym.terminalNames[cur_token.sym] + " L:" + cur_token.left + " C:" +  cur_token.right);
-            // printk("    Se esperaba: " + tokens.size());
-            // tokens.forEach(token -> {
-            //     printk((String) token);
-            // });
-            // actioner.getReportManager().addError();
-        }
+        try {
+            if(cur_token.sym == sym.EOF) {
+              System.out.println("File read eneded");
+            } else {
+              List tokens = expected_token_ids();
+              String message = "Error al leer, se esperaba: ";
+              for(Object token: tokens) {
+                message +="\n" + sym.terminalNames[(int) token];
+              }
+              actioner.getReportManager().addError(cur_token.left,cur_token.right,cur_token.value.toString(), message,2);
+            }
+          } catch (Exception e) {}
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {

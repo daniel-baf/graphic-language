@@ -36,7 +36,6 @@
 
 
             <Button
-                style="@android:style/ButtonBar"
                 android:id="@+id/btnReturnToCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

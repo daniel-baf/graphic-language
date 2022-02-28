@@ -6,6 +6,7 @@ package jefemayoneso.compi1prac1.Lexer;
 import java_cup.runtime.*;
 import jefemayoneso.compi1prac1.Parser.sym;
 import java.util.ArrayList;
+import jefemayoneso.compi1prac1.Utilities.CommonError;
 
 /***************************************/
 /**********   CONFIGURATION   **********/
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 %{
     private ArrayList<char[]> mathSymTknsPos = new ArrayList<>();
+    private ArrayList<CommonError> errors = new ArrayList<>();
 
     private void saveInfMathTkn() {
         char L = ' ';
@@ -30,7 +32,6 @@ import java.util.ArrayList;
         char C = ' ';
         try {
             C = yycharat(0);
-
         } catch(Exception e) {
             System.out.println("ERROR getting char at Lexer class");
         }
@@ -47,9 +48,15 @@ import java.util.ArrayList;
         }
         mathSymTknsPos.add(new char[]{L, C, R});
     }
-
     public ArrayList<char[]> getMathSymTknsPos() {
         return mathSymTknsPos;
+    }
+    public ArrayList<CommonError> getErrors() {
+        return errors;
+    }
+
+    private void addError() {
+      this.errors.add(new CommonError(yyline, yycolumn, "Lexico","Caracter no reconocido",yytext()));
     }
 
 %}
@@ -150,4 +157,4 @@ whitespace=[\s\t\r\n]+ // whitespace
 /******************* other *******************/
 /*********************************************/
 
-[^]                 {return new Symbol(sym.ERROR, yyline + 1, yycolumn + 1, yytext());}
+[^]                 {addError(); return new Symbol(sym.ERROR, yyline + 1, yycolumn + 1, yytext());}

@@ -28,69 +28,40 @@ class RepSection : AppCompatActivity() {
         findViewById<TextView>(R.id.txtPieGraphResult).text = pieDeclared.toString()
     }
 
-//    private fun addMathReport(rows: ArrayList<CharArray>) {
-//        try {
-//            val llMathReport= findViewById<TableLayout>(R.id.mathResults)
-//            val headers = arrayOf("PREVIO","ACTUAL","SIGUIENTE")
-//            val dinamicTable = DinamicTable(llMathReport,applicationContext)
-//            dinamicTable.addHeader(headers)
-//            dinamicTable.addData(getArrayOfStrings(rows))
-//        } catch (ex: Exception) {
-//            println("ERRRO: $ex")
-//            ex.printStackTrace()
-//        }
-//    }
+    private fun addMathReport(rows: ArrayList<CharArray>) = try {
+        val llMathReport= findViewById<TableLayout>(R.id.mathResults)
+        val dinamicTable = DinamicTable(llMathReport,applicationContext)
+        val headers = arrayOf("PREVIO","ACTUAL","SIGUIENTE")
+        dinamicTable.addHeader(headers)
+        dinamicTable.addData(getArrayOfStrings(rows))
+    } catch (ex: Exception) {}
 
-//    private fun getArrayOfStrings(toCast: ArrayList<CharArray>): ArrayList<Array<String>> {
-//        val items = ArrayList<Array<String>>()
-//        for (item in toCast) {
-//            var row = Array<String>(item.size){""}
-//            for ((iterator, subItem) in item.withIndex()) {
-//                row[iterator] = subItem + ""
-//            }
-//            items.add(row)
-//        }
-//        return items
-//    }
-
-    private fun addMathReport(rows: ArrayList<CharArray>) {
-        try {
-            val llMathLayout = findViewById<LinearLayout>(R.id.mathResults)
-            for (row in rows) {
-                val rowLt = LinearLayout(llMathLayout.context)
-                for(item in row) {
-                    val cell = TextView(rowLt.context)
-                    cell.text = item.toString()
-                    rowLt.addView(cell)
-                }
-                llMathLayout.addView(rowLt)
-            }
-
-
-        } catch (ex: Exception) {
-            println("ERRRO: $ex")
-            ex.printStackTrace()
-        }
-    }
-
-    private fun showErrorReport(errors: ArrayList<CommonError>) {
-        try {
-            val tableLayout = findViewById<TableLayout>(R.id.errorLayout) as TableLayout
-            val tableDinamic = DinamicTable(tableLayout,applicationContext)
-            val headers = arrayOf("Linea","Columna","Tipo","Lexema","Mensaje")
-            tableDinamic.addHeader(headers)
-            tableDinamic.addData(getStringArray(errors))
-
-        } catch (ex: Exception) {
-
-        }
-    }
+    private fun showErrorReport(errors: ArrayList<CommonError>) = try {
+        val tableLayout = findViewById<TableLayout>(R.id.errorLayout)
+        val tableDinamic = DinamicTable(tableLayout,applicationContext)
+        val headers = arrayOf("Linea","Columna","Tipo","Lexema","Mensaje")
+        tableDinamic.addHeader(headers)
+        tableDinamic.addData(getStringArray(errors))
+    } catch (ex: Exception) {}
 
     private fun getStringArray(errors: ArrayList<CommonError>): ArrayList<Array<String>> {
-        val errorCasted = java.util.ArrayList<Array<String>>()
+        val errorCasted = ArrayList<Array<String>>()
         for (error in errors) {
             errorCasted.add(arrayOf(error.line.toString(), error.col.toString(), error.errorType, error.lexeme, error.message))
         }
         return errorCasted
+    }
+
+
+    private fun getArrayOfStrings(toCast: ArrayList<CharArray>): ArrayList<Array<String>> {
+        val items = ArrayList<Array<String>>()
+        for (item in toCast) {
+            var row = Array<String>(item.size){""}
+            for ((iterator, subItem) in item.withIndex()) {
+                row[iterator] = subItem.toString()
+            }
+            items.add(row)
+        }
+        return items
     }
 }

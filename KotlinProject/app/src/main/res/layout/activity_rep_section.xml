@@ -31,7 +31,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="8dp">
 
             <Button
                 android:id="@+id/btnReturnToCode"
@@ -47,19 +48,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp">
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="253dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Declaraciones" />
+                android:text="@string/declaraciones"
+                android:layout_marginBottom="10dp"/>
 
             <TableLayout
                 android:layout_width="290dp"
                 android:layout_height="match_parent"
                 android:gravity="center|center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -77,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="0" />
+                        android:text="@string/_0" />
                 </TableRow>
 
                 <TableRow
@@ -96,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="0" />
+                        android:text="@string/_0" />
 
                 </TableRow>
 
@@ -105,29 +109,67 @@
 
         <!--   REPORT OF SYMBOLS BEFORE AND AFTER MATH SYM     -->
         <LinearLayout
-            android:id="@+id/mathResults"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
+            android:gravity="center"
             android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reporte_simbolos_aritmeticos"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true">
+
+                    <TableLayout
+                        android:id="@+id/mathResults"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                    </TableLayout>
+                </HorizontalScrollView>
+            </ScrollView>
 
         </LinearLayout>
 
-
-
         <!--    ERROR LIST    -->
-
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="300dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TableLayout
-                android:id="@+id/errorLayout"
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:text="@string/reporte_de_errores"/>
 
-            </TableLayout>
-        </HorizontalScrollView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true">
 
+                    <TableLayout
+                        android:id="@+id/errorLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                    </TableLayout>
+                </HorizontalScrollView>
+            </ScrollView>
+
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
