@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Compi1Prac1">
         <activity
-            android:name=".ReportSection"
+            android:name=".RepSection"
             android:exported="false" />
         <activity
             android:name=".GraphSection"

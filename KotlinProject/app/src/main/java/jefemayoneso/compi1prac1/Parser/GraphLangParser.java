@@ -298,9 +298,6 @@ public class GraphLangParser extends java_cup.runtime.lr_parser {
         }
     }
 
-    public void addMathSymReport(Symbol cur_token) {
-          actioner.getReportManager().addMathSymbolsReport(sym.terminalNames[cur_token.sym],sym.terminalNames[cur_token.left],sym.terminalNames[cur_token.right]);
-    }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -918,7 +915,7 @@ class CUP$GraphLangParser$actions {
           case 50: // arithm_sim ::= ADDITION 
             {
               Object RESULT =null;
-		 RESULT = sym.ADDITION; addMathSymReport(cur_token); 
+		 RESULT = sym.ADDITION; 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("arithm_sim",18, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -927,7 +924,7 @@ class CUP$GraphLangParser$actions {
           case 51: // arithm_sim ::= SUBSTRACTION 
             {
               Object RESULT =null;
-		 RESULT = sym.SUBSTRACTION; addMathSymReport(cur_token); 
+		 RESULT = sym.SUBSTRACTION; 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("arithm_sim",18, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -936,7 +933,7 @@ class CUP$GraphLangParser$actions {
           case 52: // arithm_sim ::= MULTIPLICATION 
             {
               Object RESULT =null;
-		 RESULT = sym.MULTIPLICATION; addMathSymReport(cur_token); 
+		 RESULT = sym.MULTIPLICATION; 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("arithm_sim",18, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;
@@ -945,7 +942,7 @@ class CUP$GraphLangParser$actions {
           case 53: // arithm_sim ::= DIVISION 
             {
               Object RESULT =null;
-		 RESULT = sym.DIVISION; addMathSymReport(cur_token);
+		 RESULT = sym.DIVISION; 
               CUP$GraphLangParser$result = parser.getSymbolFactory().newSymbol("arithm_sim",18, ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$GraphLangParser$stack.peek()), RESULT);
             }
           return CUP$GraphLangParser$result;

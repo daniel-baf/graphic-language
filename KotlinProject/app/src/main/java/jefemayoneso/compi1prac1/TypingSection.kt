@@ -33,7 +33,7 @@ class TypingSection : AppCompatActivity() {
                 "tipo: Cantidad;\n" +
                 "etiquetas: [\"Compi1\", \"Compi2\"];\n" +
                 "valores:[5+123-(12+1)*1/23,10+23/3];\n" +
-                "total: 25;\n" +
+                "total: 145;\n" +
                 "unir:[{0,1}, {1,0}];\n" +
                 "extra: \"Resto\";\n" +
                 "}\n" +
@@ -49,7 +49,7 @@ class TypingSection : AppCompatActivity() {
                 "titulo: \"Grafica 3\";\n" +
                 "tipo: Porcentaje;\n" +
                 "etiquetas: [\"Compi1\", \"Compi2\"];\n" +
-                "valores:[70, 120];\n" +
+                "valores:[70, 30];\n" +
                 "unir:[{0,1}, {1,0}];\n" +
                 "extra: \"Resto\";\n" +
                 "}" +

@@ -30,7 +30,6 @@ class BarGraphDrawer {
                 yVal = bar.getyAxisItems()[merge[1]].toFloat() // the size
                 xVal = bar.getxAxisItems()[merge[0]] // data to represent
                 val barEntry = BarEntry(iterator.toFloat(),yVal, xVal) // save data and increase iterator
-                barEntry.describeContents()
                 barList.add(barEntry) // save data and increase iterator
             }
             // add the info to data set
@@ -39,17 +38,14 @@ class BarGraphDrawer {
             barDataSet.setColors(ColorTemplate.MATERIAL_COLORS,250)
             barDataSet.valueTextColor = Color.BLACK
             barDataSet.valueTextSize = 16f
-            barData = BarData(barDataSet) // save data to chart
             // save data
+            barData = BarData(barDataSet) // save data to chart
             barChart.setFitBars(true)
             barChart.data = barData// apply data to chart
             barChart.description.isEnabled = true
             // customization
-            barChart.minimumHeight = 1000
             barChart.description.text = bar.title
             barChart.animateY(1200)
-            barChart.setDrawValueAboveBar(true)
-            barChart.setDrawGridBackground(true)
             // axis
             // TODO use axisIterators for custom x axis
         } catch (ex: java.lang.Exception) {

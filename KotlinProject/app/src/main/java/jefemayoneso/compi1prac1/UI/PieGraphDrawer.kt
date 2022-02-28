@@ -37,11 +37,14 @@ class PieGraphDrawer {
             // add data to chart
             pieData = PieData(pieDataSet)
             pieChart.data = pieData
-            // animation
             pieChart.description.isEnabled = true
+            // customization
             pieChart.centerText = pie.title
-            pieChart.description.text = "Resultados en: " + pie.barGraphicType
+            pieChart.description.text = "Res en: " + pie.barGraphicType + " Extra: " + pie.extra
             pieChart.animate()
+            if(pie.barGraphicType.equals("Porcentaje")) {
+                pieChart.setUsePercentValues(true)
+            }
         } catch (ex: Exception) {
             println("Error: $ex")
         }

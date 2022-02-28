@@ -5,11 +5,13 @@
  */
 package jefemayoneso.compi1prac1.Utilities;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jefemayoneso
  */
-public class CommonError {
+public class CommonError implements Serializable {
 
     private int line;
     private int col;
@@ -73,5 +75,4 @@ public class CommonError {
     public void setLexeme(String lexeme) {
         this.lexeme = lexeme;
     }
-
 }

@@ -310,8 +310,28 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
   /* user code: */
     private ArrayList<char[]> mathSymTknsPos = new ArrayList<>();
 
-    private void saveInfMathTkn(char left, char current, char right) {
-        mathSymTknsPos.add(new char[]{left, current, right});
+    private void saveInfMathTkn() {
+        char L = ' ';
+        char R = ' ';
+        char C = ' ';
+        try {
+            C = yycharat(0);
+
+        } catch(Exception e) {
+            System.out.println("ERROR getting char at Lexer class");
+        }
+        try {
+            L = yycharat(-1);
+
+        } catch(Exception e) {
+            System.out.println("ERROR getting char at Lexer class");
+        }
+        try {
+            R = yycharat(1);
+        } catch(Exception e) {
+            System.out.println("ERROR getting char at Lexer class");
+        }
+        mathSymTknsPos.add(new char[]{L, C, R});
     }
 
     public ArrayList<char[]> getMathSymTknsPos() {
@@ -759,32 +779,32 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
             // fall through
           case 45: break;
           case 12: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.ADDITION, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn();  return new Symbol(sym.ADDITION, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 46: break;
           case 13: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.SUBSTRACTION, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn();  return new Symbol(sym.SUBSTRACTION, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 47: break;
           case 14: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.MULTIPLICATION, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn();  return new Symbol(sym.MULTIPLICATION, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 48: break;
           case 15: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.DIVISION, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn();  return new Symbol(sym.DIVISION, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 49: break;
           case 16: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);
+            { return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 50: break;
           case 17: 
-            { saveInfMathTkn(yycharat(-1),yycharat(0),yycharat(1));  return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);
+            { return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 51: break;

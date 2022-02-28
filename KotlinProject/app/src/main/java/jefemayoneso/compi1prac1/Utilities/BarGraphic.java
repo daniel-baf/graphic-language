@@ -36,12 +36,23 @@ public class BarGraphic extends GraphicData {
             if(this.title.isEmpty()) {
                 reportManager.addError(-1,-1,"Grafica barra","El titulo de la grafica no puede estar vacio",3);
                 return false;
+            } else if(this.xAxisDecl != 1) {
+                reportManager.addError(-1,-1,"Grafica barra","Se debe definir solamente 1 vez los ejes x",3);
+                return false;
+            } else if(this.yAxisDecl != 1) {
+                reportManager.addError(-1,-1,"Grafica barra","Se debe definir solamente 1 vez los ejes y",3);
+                return false;
+            } else if(this.titleDecl != 1) {
+                reportManager.addError(-1,-1,"Grafica barra","Se debe definir solamente 1 vez el titulo",3);
+                return false;
+            } else if(this.mergeDecl != 1) {
+                reportManager.addError(-1,-1,"Grafica barra","Se debe definir solamente 1 vez el atributo unir",3);
+                return false;
             }
+            return true;
         }catch (Exception e) {
             return false;
         }
-        return this.xAxisDecl == 1 && this.yAxisDecl == 1
-                && this.titleDecl == 1 && this.mergeDecl == 1;
     }
 
     public int getxAxisDecl() {

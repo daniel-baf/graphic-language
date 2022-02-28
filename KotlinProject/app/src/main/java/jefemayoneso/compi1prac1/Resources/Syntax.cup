@@ -55,9 +55,6 @@ parser code {:
         }
     }
 
-    public void addMathSymReport(Symbol cur_token) {
-          actioner.getReportManager().addMathSymbolsReport(sym.terminalNames[cur_token.sym],sym.terminalNames[cur_token.left],sym.terminalNames[cur_token.right]);
-    }
 :}
 
 /**************************************/
@@ -262,10 +259,10 @@ arithm ::=
 ;
 
 arithm_sim ::=                                                
-      ADDITION                         {: RESULT = sym.ADDITION; addMathSymReport(cur_token); :}
-    | SUBSTRACTION                     {: RESULT = sym.SUBSTRACTION; addMathSymReport(cur_token); :}
-    | MULTIPLICATION                   {: RESULT = sym.MULTIPLICATION; addMathSymReport(cur_token); :}
-    | DIVISION                         {: RESULT = sym.DIVISION; addMathSymReport(cur_token);:}
+      ADDITION                         {: RESULT = sym.ADDITION; :}
+    | SUBSTRACTION                     {: RESULT = sym.SUBSTRACTION; :}
+    | MULTIPLICATION                   {: RESULT = sym.MULTIPLICATION; :}
+    | DIVISION                         {: RESULT = sym.DIVISION; :}
 ;
 		
 digit ::= 

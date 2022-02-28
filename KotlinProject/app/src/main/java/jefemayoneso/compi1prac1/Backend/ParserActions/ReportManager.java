@@ -1,15 +1,17 @@
 package jefemayoneso.compi1prac1.Backend.ParserActions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import jefemayoneso.compi1prac1.Utilities.CommonError;
 
-public class ReportManager {
+public class ReportManager implements Serializable {
 
     private final ArrayList<CommonError> errors;
-    private final ArrayList<String[]> mathOperators;
+    private ArrayList<char[]> mathOperators;
     private int barGraphicsCounter;
     private int pieGraphicsCounter;
+
 
     public ReportManager() {
         this.errors = new ArrayList<>();
@@ -18,20 +20,11 @@ public class ReportManager {
         this.pieGraphicsCounter = 0;
     }
 
-    public ArrayList<CommonError> getErrors() {
-        return errors;
-    }
-
-    public ArrayList<String[]> getMathOperators() {
-        return mathOperators;
-    }
-
-    public int getBarGraphicsCounter() {
-        return barGraphicsCounter;
-    }
-
-    public int getPieGraphicsCounter() {
-        return pieGraphicsCounter;
+    public ReportManager(ArrayList<CommonError> errors, ArrayList<char[]> mathOperators, int barGraphicsCounter, int pieGraphicsCounter) {
+        this.errors = errors;
+        this.mathOperators = mathOperators;
+        this.barGraphicsCounter = barGraphicsCounter;
+        this.pieGraphicsCounter = pieGraphicsCounter;
     }
 
     public void increasePieGraphicsCounter() {
@@ -69,7 +62,31 @@ public class ReportManager {
         this.errors.add(new CommonError(line, col, errType, message, lexeme));
     }
 
-    public void addMathSymbolsReport(String previousTkn, String actualTkn, String nextTokn) {
-        this.mathOperators.add(new String[]{previousTkn, actualTkn, nextTokn});
+    public ArrayList<CommonError> getErrors() {
+        return errors;
+    }
+
+    public ArrayList<char[]> getMathOperators() {
+        return mathOperators;
+    }
+
+    public int getBarGraphicsCounter() {
+        return barGraphicsCounter;
+    }
+
+    public void setBarGraphicsCounter(int barGraphicsCounter) {
+        this.barGraphicsCounter = barGraphicsCounter;
+    }
+
+    public int getPieGraphicsCounter() {
+        return pieGraphicsCounter;
+    }
+
+    public void setPieGraphicsCounter(int pieGraphicsCounter) {
+        this.pieGraphicsCounter = pieGraphicsCounter;
+    }
+
+    public void setMathOperators(ArrayList<char[]> mathOperators) {
+        this.mathOperators = mathOperators;
     }
 }

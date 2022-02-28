@@ -1,0 +1,76 @@
+package jefemayoneso.compi1prac1.UI
+
+import android.content.Context
+import android.widget.TableLayout
+import android.widget.TextView
+import android.view.Gravity
+import android.widget.TableRow
+import jefemayoneso.compi1prac1.Utilities.CommonError
+import java.util.ArrayList
+
+class DinamicTable(private val layout: TableLayout, private val context: Context) {
+    private lateinit var headers: Array<String>
+    private var data: ArrayList<Array<String>>? = null
+    private var tableRow: TableRow? = null
+    private var txtCell: TextView? = null
+    private var indexC = 0
+    private var indexR = 0
+
+    fun addHeader(headers: Array<String>) {
+        this.headers = headers
+        createHeader()
+    }
+
+    fun addData(data: ArrayList<Array<String>>?) {
+        this.data = data
+        createDataTable()
+    }
+
+    private fun newRow() {
+        tableRow = TableRow(context)
+    }
+
+    private fun newCell() {
+        txtCell = TextView(context)
+        txtCell!!.gravity = Gravity.CENTER
+        txtCell!!.textSize = 10f
+    }
+
+    private fun createHeader() {
+        indexC = 0
+        newRow()
+        while (indexC < headers.size) {
+            newCell()
+            txtCell!!.text = headers[indexC++]
+            tableRow!!.addView(txtCell)
+        }
+        layout.addView(tableRow)
+    }
+
+    private fun createDataTable() {
+        var info: String
+        indexR = 1
+        while (indexR <= headers.size) {
+            newRow()
+            indexC = 0
+            while (indexC <= headers.size) {
+                newCell()
+                val cols = data!![indexR - 1]
+                info = if(indexC < cols.size) cols[indexC] else ""
+                txtCell!!.text = info
+                 tableRow!!.addView(txtCell, newTableRowParams())
+                indexC++
+            }
+            layout.addView(tableRow)
+            indexR++
+        }
+    }
+
+    private fun newTableRowParams(): TableRow.LayoutParams {
+        val params = TableRow.LayoutParams()
+        params.setMargins(1, 1, 1, 1)
+        params.weight = 1f
+        return params
+    }
+
+}

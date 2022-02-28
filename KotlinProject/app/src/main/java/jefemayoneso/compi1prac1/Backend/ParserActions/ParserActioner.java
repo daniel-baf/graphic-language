@@ -66,7 +66,7 @@ public class ParserActioner {
         boolean done = graphType == 0 ? bga.titleDeclaration(title, this.barGraph) : this.pga.titleDeclaration(title, this.pieGraphic);
         // show message
         if (!done) {
-            this.reportManager.addError(line, col, "Declaracion de titulo", "Hay más de 1 declaracion de titulo", 1);
+            this.reportManager.addError(line, col, "Declaracion de titulo", "Hay más de 1 declaracion de titulo", 3);
             regsitErrorOnGraph(graphType);
         }
     }
@@ -81,7 +81,7 @@ public class ParserActioner {
     public void registXAxisDeclaration(int line, int col, String items) {
         // split item with \n for files
         if (!this.bga.xAxisDeclaration(items, this.barGraph)) {
-            this.reportManager.addError(line, col, "Declaracion de eje x", "Hay más de 1 declaracion de ejes x", 1);
+            this.reportManager.addError(line, col, "Declaracion de eje x", "Hay más de 1 declaracion de ejes x", 3);
             regsitErrorOnGraph(0);
         }
     }
@@ -96,7 +96,7 @@ public class ParserActioner {
      */
     public void registYAxisDeclaration(int line, int col, String items) {
         if (!this.bga.yAxisDeclaration(items, this.barGraph)) {
-            this.reportManager.addError(line, col, "Declaraciones de eje y", "Hay mas de 1 declaracion de ejes y", 1);
+            this.reportManager.addError(line, col, "Declaraciones de eje y", "Hay mas de 1 declaracion de ejes y", 3);
             regsitErrorOnGraph(0);
         }
     }
@@ -112,7 +112,7 @@ public class ParserActioner {
     public void registMergeDeclaration(int line, int col, ArrayList<int[]> mergeCoordenates, int graphType) {
         boolean done = graphType == 0 ? this.bga.mergeDeclaration(mergeCoordenates, this.barGraph) : this.pga.mergeDeclaration(mergeCoordenates, this.pieGraphic);
         if (!done) {
-            this.reportManager.addError(line, col, "Declaraciones de union de items", "Hay mas de 1 declaraciones unir", 1);
+            this.reportManager.addError(line, col, "Declaraciones de union de items", "Hay mas de 1 declaraciones unir", 3);
             regsitErrorOnGraph(graphType);
         }
     }
@@ -126,7 +126,7 @@ public class ParserActioner {
      */
     public void registTypeDeclaration(int line, int col, int type) {
         if (!this.pga.typeDeclaration(type, this.pieGraphic)) {
-            this.reportManager.addError(line, col, "Declaracion de tipo de grafica de barra", "Hay mas de 1 declaraciones unir", 1);
+            this.reportManager.addError(line, col, "Declaracion de tipo de grafica de barra", "Hay mas de 1 declaraciones unir", 3);
             regsitErrorOnGraph(1);
         }
     }
@@ -140,14 +140,14 @@ public class ParserActioner {
      */
     public void registTagsDeclaration(int line, int col, String items) {
         if (!this.pga.tagsDeclaration(items, this.pieGraphic)) {
-            this.reportManager.addError(line, col, "Declaracion de etiquetas", "Hay mas de 1 declaracion para tags", 1);
+            this.reportManager.addError(line, col, "Declaracion de etiquetas", "Hay mas de 1 declaracion para tags", 3);
             regsitErrorOnGraph(1);
         }
     }
 
     public void regisExtraDeclaration(int line, int col, String extra) {
         if (!this.pga.extraDeclaration(extra, this.pieGraphic)) {
-            this.reportManager.addError(line, col, "Declaracion de extras", "Hay mas de 1 declaracion de extras", 1);
+            this.reportManager.addError(line, col, "Declaracion de extras", "Hay mas de 1 declaracion de extras", 3);
             regsitErrorOnGraph(1);
         }
     }
@@ -162,7 +162,7 @@ public class ParserActioner {
      */
     public void registValuesDeclaration(int line, int col, String numbers) {
         if (!this.pga.valuesDeclaration(numbers, this.pieGraphic)) {
-            this.reportManager.addError(line, col, "Declaracion de valores", "Hay mas de 1 declaracion para valores", 1);
+            this.reportManager.addError(line, col, "Declaracion de valores", "Hay mas de 1 declaracion para valores", 3);
             regsitErrorOnGraph(1);
         }
     }
@@ -175,7 +175,7 @@ public class ParserActioner {
      */
     public void registTotalDeclaration(int line, int col, Double number) {
         if (!this.pga.totalDeclaration(number, this.pieGraphic)) {
-            this.reportManager.addError(line, col, "Declaracion de total", "Hay mas de 1 declaracion para totales", 1);
+            this.reportManager.addError(line, col, "Declaracion de total", "Hay mas de 1 declaracion para totales", 3);
             regsitErrorOnGraph(1);
         }
     }
