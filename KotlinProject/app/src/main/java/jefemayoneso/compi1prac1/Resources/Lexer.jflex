@@ -113,8 +113,8 @@ whitespace=[\s\t\r\n]+ // whitespace
 /* DIVISION */
 ("/")               {saveInfMathTkn();  return new Symbol(sym.DIVISION, yyline + 1, yycolumn + 1);}
 /* PARENTHESIS */
-("(")               { return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);}
-(")")               { return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);}
+("(")               {saveInfMathTkn(); return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);}
+(")")               {saveInfMathTkn(); return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);}
 
 /******************************************************/
 /******************* reserved words *******************/

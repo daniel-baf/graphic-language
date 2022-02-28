@@ -806,12 +806,12 @@ public class GraphLangLexer implements java_cup.runtime.Scanner {
             // fall through
           case 49: break;
           case 16: 
-            { return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn(); return new Symbol(sym.OPEN_PARENTHESIS, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 50: break;
           case 17: 
-            { return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);
+            { saveInfMathTkn(); return new Symbol(sym.CLOSE_PARENTHESIS, yyline + 1, yycolumn + 1);
             } 
             // fall through
           case 51: break;
